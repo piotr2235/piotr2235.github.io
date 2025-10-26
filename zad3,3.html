@@ -3,53 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <title>Formularz Rejestracyjny</title>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f2f5; 
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        form {
+            background-color: #ffffff; 
+            padding: 25px;
+            border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px; 
+            width: 100%;
+        }
+
+      
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block; 
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+      
+        input[type="text"],
+        input[type="tel"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box; 
+        }
+        
+        
+        input:focus,
+        textarea:focus {
+            border-color: #007bff; 
+            outline: none; 
+        }
+
+        fieldset {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+
+        legend {
+            font-weight: bold;
+            padding: 0 5px; 
+        }
+
+       
+        .radio-option {
+            display: flex;
+            align-items: center; 
+            margin-bottom: 5px;
+        }
+        
+      
+        input[type="radio"] {
+            margin-right: 8px;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff; 
+            color: white; 
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer; 
+            font-size: 16px;
+            font-weight: bold;
+            width: 100%; 
+            transition: background-color 0.2s;
+        }
+
+     
+        input[type="submit"]:hover {
+            background-color: #0056b3; 
+        }
+
+    </style>
 </head>
 <body>
 
     <form action="zad2c.html" method="GET">
-        <br> <br> <label for="Imie">Imie:</label>
-        <input type="text" id="Imie" name="Imie" placeholder="np. Jan" maxlength="15" required=""><br><br>
 
-        <label for="Nazwisko">Nazwisko:</label>
-        <input type="text" id="Nazwisko" name="Nazwisko" placeholder="np. Kowalski" maxlength="15" required=""><br><br>
+        <div class="form-group">
+            <label for="Imie">Imię:</label>
+            <input type="text" id="Imie" name="Imie" placeholder="np. Jan" maxlength="15" required="">
+        </div>
 
-        <label for="miasto">Miasto</label>
-        <input type="text" id="miasto" name="miasto" placeholder="np. Warszawa" required=""> <br> <br>
+        <div class="form-group">
+            <label for="Nazwisko">Nazwisko:</label>
+            <input type="text" id="Nazwisko" name="Nazwisko" placeholder="np. Kowalski" maxlength="15" required="">
+        </div>
 
-        <label for="ulica">Ulica:</label>
-        <input type="text" id="ulica" name="ulica" placeholder="np. Marszałkowska" required=""> <br> <br>
+        <div class="form-group">
+            <label for="miasto">Miasto</label>
+            <input type="text" id="miasto" name="miasto" placeholder="np. Warszawa" required="">
+        </div>
 
-        <label for="tel">Tel:</label>
-        <input type="tel" id="tel" name="tel" placeholder="np. 123-456-789" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" required=""> <br> <br>
+        <div class="form-group">
+            <label for="ulica">Ulica:</label>
+            <input type="text" id="ulica" name="ulica" placeholder="np. Marszałkowska" required="">
+        </div>
 
-        <label for="mail">E-mail:</label>
-        <input type="email" id="mail" name="mail" placeholder="np. JanKowalski@gmail.com" required=""> <br> <br>
+        <div class="form-group">
+            <label for="tel">Tel:</label>
+            <input type="tel" id="tel" name="tel" placeholder="np. 123-456-789" pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}" required="">
+        </div>
 
-        <label for="haslo">Hasło:</label>
-        <input type="password" id="haslo" name="haslo" placeholder="********" maxlength="15" required=""> <br> <br>
+        <div class="form-group">
+            <label for="mail">E-mail:</label>
+            <input type="email" id="mail" name="mail" placeholder="np. JanKowalski@gmail.com" required="">
+        </div>
 
-        <label for="data">Data urodzenia:</label>
-        <input type="date" id="data" name="data" required=""> <br> <br>
+        <div class="form-group">
+            <label for="haslo">Hasło:</label>
+            <input type="password" id="haslo" name="haslo" placeholder="********" maxlength="15" required="">
+        </div>
 
-        <label for="prawoj">Prawo jazdy:</label>
-        <label for="tak">TAK</label>
-        <input type="radio" id="tak" value="tak" name="prawoj" required="">
-        <label for="oczywiście ze tak">Oczywiście ze tak</label>
-        <input type="radio" id="nie" value="nie" name="prawoj" required=""> <br> <br>
+        <div class="form-group">
+            <label for="data">Data urodzenia:</label>
+            <input type="date" id="data" name="data" required="">
+        </div>
 
-        <label for="plec">Płeć:</label>
-        <label for="M">M</label>
-        <input type="radio" id="M" value="M" name="plec" required="">
-        <label for="K">K</label>
-        <input type="radio" id="K" value="K" name="plec" required="">
-        <label for="N">NIE POWIEM</label>
-        <input type="radio" id="N" value="N" name="plec" required=""> <br> <br>
+        <fieldset>
+            <legend>Prawo jazdy:</legend>
+            <div class="radio-option">
+                <input type="radio" id="tak" value="tak" name="prawoj" required="">
+                <label for="tak">TAK</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="nie" value="nie" name="prawoj" required="">
+                <label for="nie">NIE</label>
+            </div>
+        </fieldset>
 
-        <label for="opinia">Opinia:</label>
-        <input type="text" id="opinia" name="opinia" placeholder="np. Napisz swoja opinie" maxlength="200"> <br> <br>
+        <fieldset>
+            <legend>Płeć:</legend>
+            <div class="radio-option">
+                <input type="radio" id="M" value="M" name="plec" required="">
+                <label for="M">M</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="K" value="K" name="plec" required="">
+                <label for="K">K</label>
+            </div>
+            <div class="radio-option">
+                <input type="radio" id="N" value="N" name="plec" required="">
+                <label for="N">NIE POWIEM</label>
+            </div>
+        </fieldset>
 
-        <input type="submit">
+        <div class="form-group">
+            <label for="opinia">Opinia:</label>
+            <textarea id="opinia" name="opinia" placeholder="np. Napisz swoja opinie" maxlength="200" rows="4"></textarea>
+        </div>
+
+        <input type="submit" value="Zarejestruj się">
     </form>
 
 </body>
 </html>
+
