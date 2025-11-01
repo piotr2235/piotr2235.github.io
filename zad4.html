@@ -1,1 +1,154 @@
-das
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAlk</title>
+    <style>
+      
+        body {
+            /* Wyśrodkowanie wszystkiego na stronie dla lepszego wyglądu */
+            display: grid;
+            place-items: center;
+            min-height: 100vh; /* Zmienione na 100vh, aby centrować na całym ekranie */
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .display-screen {
+            width: 100%;
+            height: 50px;
+            background-color: #222; /* Ciemne tło ekranu */
+            color: white;           /* Biały tekst */
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+            text-align: right;      /* Wyrównanie tekstu do prawej */
+            font-size: 24px;        /* Większa czcionka */
+            box-sizing: border-box; /* Zapobiega problemom z paddingiem */
+            margin-bottom: 15px;    /* Odstęp pod ekranem */
+        }
+
+        .my-button {
+            /* to jak duzy */
+            background-color: #222; /* Niebieskie tło */
+            color: white;             /* Biały tekst */
+            padding: 10px 20px;       /* Wewnętrzny odstęp (góra/dół, lewo/prawo) */
+            margin: 5px;              /* Zewnętrzny odstęp (margines) 5px z każdej strony */
+            border: none;             /* Usunięcie domyślnej ramki */
+            border-radius: 5px;       /* Zaokrąglone rogi */
+            cursor: pointer;          /* Zmiana kursora na "rączkę" po najechaniu */
+            font-size: 16px;          /* Rozmiar czcionki */
+            min-width: 40px;          /* Minimalna szerokość, żeby przyciski były równe */
+            text-align: center;
+        }
+
+     
+    </style>
+</head>
+<body>
+
+    <!-- Kontener grupujący ekran i przyciski -->
+    <div class="calculator-container">
+
+        <!-- To jest nasz nowy "ekranik" -->
+        <!-- Dajemy mu 'id', aby JavaScript mógł go znaleźć -->
+        <div id="display" class="display-screen">0</div>
+
+        <!-- Poprawiona struktura HTML dla przycisków -->
+        <div>
+            <button class="my-button">0</button>
+            <button class="my-button">C</button>
+            <button class="my-button">+</button>
+            <button class="my-button">-</button>
+        </div>
+        <div>
+            <button class="my-button">1</button>
+            <button class="my-button">2</button>
+            <button class="my-button">3</button>
+            <button class="my-button">*</button>
+        </div>
+        <div>
+            <button class="my-button">4</button>
+            <button class="my-button">5</button>
+            <button class="my-button">6</button>
+            <button class="my-button">/</button>
+        </div>
+        <div>
+            <button class="my-button">7</button>
+            <button class="my-button">8</button>
+            <button class="my-button">9</button>
+            <button class="my-button">=</button>
+        </div>
+        
+
+    </div>
+
+    <!-- DODANY: JavaScript do obsługi kliknięć -->
+    <script>
+        // 1. Znajdź nasz ekranik po jego ID
+        const display = document.getElementById('display');
+
+        // 2. Znajdź WSZYSTKIE elementy z klasą 'my-button'
+        const buttons = document.querySelectorAll('.my-button');
+
+        // 3. Przejdź przez każdy znaleziony przycisk i dodaj mu "słuchacza"
+        buttons.forEach(function(button) {
+            
+            // 4. To się stanie, gdy przycisk zostanie kliknięty
+            button.addEventListener('click', function() {
+                
+                // Pobierz tekst z klikniętego przycisku (np. "1", "+", "C")
+                const buttonText = button.textContent;
+                const currentDisplay = display.textContent;
+
+                // 5. Zdecyduj, co zrobić z tym tekstem
+                if (buttonText === '0'&&currentDisplay === '0' ) {
+                    // Jeśli to 'C', wyczyść ekran (ustaw na "0")
+                    display.textContent = '0';
+                
+                }else
+                if (buttonText === 'C') {
+                    // Jeśli to 'C', wyczyść ekran (ustaw na "0")
+                    display.textContent = '0';
+                
+                } else if (buttonText === '=') {
+                    // DODANA LOGIKA: Jeśli to '=', oblicz wynik
+                    try {
+                        // Używamy new Function(), co jest trochę bezpieczniejsze niż eval()
+                        // Oblicza string matematyczny, np. "5+3"
+                        const result = new Function('return ' + currentDisplay)();
+                        display.textContent = result;
+                    } catch (error) {
+                        // Jeśli użytkownik wpisał coś błędnego, np. "5++3"
+                        display.textContent = 'Błąd';
+                    }
+
+                } else if (currentDisplay === '0' || currentDisplay === 'Błąd') {
+                    // ZMIENIONA LOGIKA: Jeśli na ekranie jest "0" lub "Błąd"
+                    
+                    if (currentDisplay === '0' && '+-*/'.includes(buttonText)) {
+                         // Pozwól na wpisanie "0+", "0*", itp.
+                         display.textContent = '0' + buttonText;
+                    } else {
+                        // W innym przypadku (np. kliknięcie "5" po "Błąd")
+                        // po prostu zacznij od nowa z klikniętą cyfrą/znakiem
+                        display.textContent = buttonText;
+                    }
+                
+                } else {
+                    // W każdym innym przypadku, dodaj tekst z przycisku do tego, co już jest
+                    display.textContent += buttonText;
+                }
+
+                // Uwaga: To nie liczy wyniku dla '=', po prostu wyświetla '='.
+                // Prawdziwa kalkulacja wymagałaby bardziej złożonej logiki.
+            });
+        });
+
+    </script>
+
+</body>
+</html>
+
+
