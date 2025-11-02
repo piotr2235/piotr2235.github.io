@@ -130,6 +130,11 @@
                     if (currentDisplay === '0' && '+-*/'.includes(buttonText)) {
                          // Pozwól na wpisanie "0+", "0*", itp.
                          display.textContent = '0' + buttonText;
+                    } if( currentDisplay.charAt(mojString.length() - 1)==='-+*/')
+                    {
+
+
+
                     } else {
                         // W innym przypadku (np. kliknięcie "5" po "Błąd")
                         // po prostu zacznij od nowa z klikniętą cyfrą/znakiem
