@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAlk</title>
+    <title>KAlk</title> <!-- Twój oryginalny tytuł -->
     <style>
       
         body {
@@ -24,7 +24,7 @@
             border-radius: 5px;
             padding: 10px;
             text-align: right;      /* Wyrównanie tekstu do prawej */
-            font-size: 24px;        /* Większa czcionka */
+            font-size: 24px;      /* Większa czcionka */
             box-sizing: border-box; /* Zapobiega problemom z paddingiem */
             margin-bottom: 15px;    /* Odstęp pod ekranem */
         }
@@ -32,30 +32,30 @@
         .my-button {
             /* to jak duzy */
             background-color: #222; /* Niebieskie tło */
-            color: white;             /* Biały tekst */
-            padding: 10px 20px;       /* Wewnętrzny odstęp (góra/dół, lewo/prawo) */
-            margin: 5px;              /* Zewnętrzny odstęp (margines) 5px z każdej strony */
-            border: none;             /* Usunięcie domyślnej ramki */
-            border-radius: 5px;       /* Zaokrąglone rogi */
-            cursor: pointer;          /* Zmiana kursora na "rączkę" po najechaniu */
-            font-size: 16px;          /* Rozmiar czcionki */
-            min-width: 40px;          /* Minimalna szerokość, żeby przyciski były równe */
+            color: white;            /* Biały tekst */
+            padding: 10px 20px;      /* Wewnętrzny odstęp (góra/dół, lewo/prawo) */
+            margin: 5px;             /* Zewnętrzny odstęp (margines) 5px z każdej strony */
+            border: none;            /* Usunięcie domyślnej ramki */
+            border-radius: 5px;      /* Zaokrąglone rogi */
+            cursor: pointer;         /* Zmiana kursora na "rączkę" po najechaniu */
+            font-size: 16px;         /* Rozmiar czcionki */
+            min-width: 40px;         /* Minimalna szerokość, żeby przyciski były równe */
             text-align: center;
         }
 
-     
+      
     </style>
 </head>
 <body>
 
-    <!-- Kontener grupujący ekran i przyciski -->
+    <!-- Kontener grupujący ekran i przyciski (Twój oryginalny HTML) -->
     <div class="calculator-container">
 
         <!-- To jest nasz nowy "ekranik" -->
         <!-- Dajemy mu 'id', aby JavaScript mógł go znaleźć -->
         <div id="display" class="display-screen">0</div>
 
-        <!-- Poprawiona struktura HTML dla przycisków -->
+        <!-- Poprawiona struktura HTML dla przycisków (Twoja oryginalna) -->
         <div>
             <button class="my-button">0</button>
             <button class="my-button">C</button>
@@ -84,7 +84,7 @@
 
     </div>
 
-    <!-- DODANY: JavaScript do obsługi kliknięć -->
+    <!-- NOWY, ULEPSZONY JavaScript -->
     <script>
         // 1. Znajdź nasz ekranik po jego ID
         const display = document.getElementById('display');
@@ -98,56 +98,66 @@
             // 4. To się stanie, gdy przycisk zostanie kliknięty
             button.addEventListener('click', function() {
                 
-                // Pobierz tekst z klikniętego przycisku (np. "1", "+", "C")
-                const buttonText = button.textContent;
-                const currentDisplay = display.textContent;
+                const buttonText = button.textContent; // Np. "1", "+", "C"
+                const currentDisplay = display.textContent; // Np. "123"
+                const operators = '+-*/';
+                const lastChar = currentDisplay.charAt(currentDisplay.length - 1);
 
-                // 5. Zdecyduj, co zrobić z tym tekstem
-                if (buttonText === '0'&&currentDisplay === '0' ) {
-                    // Jeśli to 'C', wyczyść ekran (ustaw na "0")
-                    display.textContent = '0';
-                
-                }else
+                // --- PRZEBUDOWANA LOGIKA ---
+
                 if (buttonText === 'C') {
-                    // Jeśli to 'C', wyczyść ekran (ustaw na "0")
+                    // 1. Przycisk 'C' (Wyczyść)
                     display.textContent = '0';
                 
                 } else if (buttonText === '=') {
-                    // DODANA LOGIKA: Jeśli to '=', oblicz wynik
+                    // 2. Przycisk '=' (Oblicz)
                     try {
-                        // Używamy new Function(), co jest trochę bezpieczniejsze niż eval()
-                        // Oblicza string matematyczny, np. "5+3"
-                        const result = new Function('return ' + currentDisplay)();
-                        display.textContent = result;
+                        // Sprawdzamy, czy ostatni znak nie jest operatorem przed obliczeniem
+                        if (operators.includes(lastChar)) {
+                             display.textContent = 'Błąd'; // Nie można zakończyć operatorem
+                        } else {
+                            // Używamy new Function() do obliczenia
+                            // To jest trochę bezpieczniejsze niż eval()
+                            const result = new Function('return ' + currentDisplay)();
+                            display.textContent = result;
+                        }
                     } catch (error) {
                         // Jeśli użytkownik wpisał coś błędnego, np. "5++3"
                         display.textContent = 'Błąd';
                     }
 
-                } else if (currentDisplay === '0' || currentDisplay === 'Błąd') {
-                    // ZMIENIONA LOGIKA: Jeśli na ekranie jest "0" lub "Błąd"
+                } else if (operators.includes(buttonText)) {
+                    // 3. Przyciski operatorów (+, -, *, /)
                     
-                    if (currentDisplay === '0' && '+-*/'.includes(buttonText)) {
-                         // Pozwól na wpisanie "0+", "0*", itp.
-                         display.textContent = '0' + buttonText;
-                    } if( currentDisplay.charAt(mojString.length() - 1)==='-+*/')
-                    {
-
-
-
+                    if (currentDisplay === 'Błąd') {
+                         // Po błędzie, zacznij nowe działanie od 0
+                        display.textContent = '0' + buttonText;
+                    } else if (operators.includes(lastChar)) {
+                        // Jeśli ostatni znak TO TEŻ operator, zamień go
+                        // np. "5+" kliknięto "*" -> "5*"
+                        display.textContent = currentDisplay.slice(0, -1) + buttonText;
                     } else {
-                        // W innym przypadku (np. kliknięcie "5" po "Błąd")
-                        // po prostu zacznij od nowa z klikniętą cyfrą/znakiem
-                        display.textContent = buttonText;
+                        // W przeciwnym razie, po prostu dodaj operator
+                        display.textContent += buttonText;
                     }
-                
-                } else {
-                    // W każdym innym przypadku, dodaj tekst z przycisku do tego, co już jest
-                    display.textContent += buttonText;
-                }
 
-                // Uwaga: To nie liczy wyniku dla '=', po prostu wyświetla '='.
-                // Prawdziwa kalkulacja wymagałaby bardziej złożonej logiki.
+                } else {
+                    // 4. Przyciski cyfr (0-9)
+                    
+                    if (currentDisplay === '0' || currentDisplay === 'Błąd') {
+                        // Jeśli jest "0" lub "Błąd", zastąp go nową cyfrą
+                        // Specjalny przypadek: jeśli jest 0 i klikniemy 0, nic nie rób (zapobiega "0000")
+                        if (currentDisplay === '0' && buttonText === '0') {
+                            // nie rób nic
+                        } else {
+                             display.textContent = buttonText;
+                        }
+                    } else {
+                        // W przeciwnym razie, dopisz cyfrę
+                        display.textContent += buttonText;
+                    }
+                }
+                
             });
         });
 
@@ -155,5 +165,4 @@
 
 </body>
 </html>
-
 
