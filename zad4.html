@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAlk</title> 
+    <title>Kalkulator</title> 
     <style>
         body {
             display: grid;
@@ -13,7 +13,7 @@
             background-color: #f4f4f4;
         }
 
-        .display-screen {
+        .ekran {
             width: 100%;
             height: 50px;
             background-color: #222;
@@ -27,7 +27,7 @@
             margin-bottom: 15px;
         }
 
-        .my-button {
+        .przycisk {
             background-color: #222;
             color: white;
             padding: 10px 20px;
@@ -39,77 +39,81 @@
             min-width: 40px;
             text-align: center;
         }
+
+        .kalkulator {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-    <div class="calculator-container">
-        <div id="display" class="display-screen">0</div>
+    <div class="kalkulator">
+        <div id="ekran" class="ekran">0</div>
         <div>
-            <button class="my-button">0</button>
-            <button class="my-button">C</button>
-            <button class="my-button">+</button>
-            <button class="my-button">-</button>
+            <button class="przycisk">0</button>
+            <button class="przycisk">C</button>
+            <button class="przycisk">+</button>
+            <button class="przycisk">-</button>
         </div>
         <div>
-            <button class="my-button">1</button>
-            <button class="my-button">2</button>
-            <button class="my-button">3</button>
-            <button class="my-button">*</button>
+            <button class="przycisk">1</button>
+            <button class="przycisk">2</button>
+            <button class="przycisk">3</button>
+            <button class="przycisk">*</button>
         </div>
         <div>
-            <button class="my-button">4</button>
-            <button class="my-button">5</button>
-            <button class="my-button">6</button>
-            <button class="my-button">/</button>
+            <button class="przycisk">4</button>
+            <button class="przycisk">5</button>
+            <button class="przycisk">6</button>
+            <button class="przycisk">/</button>
         </div>
         <div>
-            <button class="my-button">7</button>
-            <button class="my-button">8</button>
-            <button class="my-button">9</button>
-            <button class="my-button">=</button>
+            <button class="przycisk">7</button>
+            <button class="przycisk">8</button>
+            <button class="przycisk">9</button>
+            <button class="przycisk">=</button>
         </div>
     </div>
 
     <script>
-        const display = document.getElementById('display');
-        const buttons = document.querySelectorAll('.my-button');
+        const ekran = document.getElementById('ekran');
+        const przyciski = document.querySelectorAll('.przycisk');
 
-        buttons.forEach(function(button) {
-            button.addEventListener('click', function() {
-                const buttonText = button.textContent;
-                const currentDisplay = display.textContent;
-                const operators = '+-*/';
-                const lastChar = currentDisplay.charAt(currentDisplay.length - 1);
+        przyciski.forEach(function(przycisk) {
+            przycisk.addEventListener('click', function() {
+                const tekstPrzycisku = przycisk.textContent;
+                const aktualnyEkran = ekran.textContent;
+                const operatory = '+-*/';
+                const ostatniZnak = aktualnyEkran.charAt(aktualnyEkran.length - 1);
 
-                if (buttonText === 'C') {
-                    display.textContent = '0';
-                } else if (buttonText === '=') {
+                if (tekstPrzycisku === 'C') {
+                    ekran.textContent = '0';
+                } else if (tekstPrzycisku === '=') {
                     try {
-                        if (operators.includes(lastChar)) {
-                             display.textContent = 'Błąd';
+                        if (operatory.includes(ostatniZnak)) {
+                             ekran.textContent = 'Blad';
                         } else {
-                            const result = new Function('return ' + currentDisplay)();
-                            display.textContent = result;
+                            const wynik = new Function('return ' + aktualnyEkran)();
+                            ekran.textContent = wynik;
                         }
-                    } catch (error) {
-                        display.textContent = 'Błąd';
+                    } catch (blad) {
+                        ekran.textContent = 'Blad';
                     }
-                } else if (operators.includes(buttonText)) {
-                    if (currentDisplay === 'Błąd') {
-                        display.textContent = '0' + buttonText;
-                    } else if (operators.includes(lastChar)) {
-                        display.textContent = currentDisplay.slice(0, -1) + buttonText;
+                } else if (operatory.includes(tekstPrzycisku)) {
+                    if (aktualnyEkran === 'Blad') {
+                        ekran.textContent = '0' + tekstPrzycisku;
+                    } else if (operatory.includes(ostatniZnak)) {
+                        ekran.textContent = aktualnyEkran.slice(0, -1) + tekstPrzycisku;
                     } else {
-                        display.textContent += buttonText;
+                        ekran.textContent += tekstPrzycisku;
                     }
                 } else {
-                    if (currentDisplay === '0' || currentDisplay === 'Błąd') {
-                        if (currentDisplay === '0' && buttonText === '0') {
+                    if (aktualnyEkran === '0' || aktualnyEkran === 'Blad') {
+                        if (aktualnyEkran === '0' && tekstPrzycisku === '0') {
                         } else {
-                             display.textContent = buttonText;
+                             ekran.textContent = tekstPrzycisku;
                         }
                     } else {
-                        display.textContent += buttonText;
+                        ekran.textContent += tekstPrzycisku;
                     }
                 }
             });
