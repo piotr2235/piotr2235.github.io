@@ -3,14 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KAlk</title> <!-- Twój oryginalny tytuł -->
+    <title>KAlk</title> 
     <style>
-      
         body {
-            /* Wyśrodkowanie wszystkiego na stronie dla lepszego wyglądu */
             display: grid;
             place-items: center;
-            min-height: 100vh; /* Zmienione na 100vh, aby centrować na całym ekranie */
+            min-height: 100vh;
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
         }
@@ -18,44 +16,34 @@
         .display-screen {
             width: 100%;
             height: 50px;
-            background-color: #222; /* Ciemne tło ekranu */
-            color: white;           /* Biały tekst */
+            background-color: #222;
+            color: white;
             border: none;
             border-radius: 5px;
             padding: 10px;
-            text-align: right;      /* Wyrównanie tekstu do prawej */
-            font-size: 24px;      /* Większa czcionka */
-            box-sizing: border-box; /* Zapobiega problemom z paddingiem */
-            margin-bottom: 15px;    /* Odstęp pod ekranem */
+            text-align: right;
+            font-size: 24px;
+            box-sizing: border-box;
+            margin-bottom: 15px;
         }
 
         .my-button {
-            /* to jak duzy */
-            background-color: #222; /* Niebieskie tło */
-            color: white;            /* Biały tekst */
-            padding: 10px 20px;      /* Wewnętrzny odstęp (góra/dół, lewo/prawo) */
-            margin: 5px;             /* Zewnętrzny odstęp (margines) 5px z każdej strony */
-            border: none;            /* Usunięcie domyślnej ramki */
-            border-radius: 5px;      /* Zaokrąglone rogi */
-            cursor: pointer;         /* Zmiana kursora na "rączkę" po najechaniu */
-            font-size: 16px;         /* Rozmiar czcionki */
-            min-width: 40px;         /* Minimalna szerokość, żeby przyciski były równe */
+            background-color: #222;
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            min-width: 40px;
             text-align: center;
         }
-
-      
     </style>
 </head>
 <body>
-
-    <!-- Kontener grupujący ekran i przyciski (Twój oryginalny HTML) -->
     <div class="calculator-container">
-
-        <!-- To jest nasz nowy "ekranik" -->
-        <!-- Dajemy mu 'id', aby JavaScript mógł go znaleźć -->
         <div id="display" class="display-screen">0</div>
-
-        <!-- Poprawiona struktura HTML dla przycisków (Twoja oryginalna) -->
         <div>
             <button class="my-button">0</button>
             <button class="my-button">C</button>
@@ -80,89 +68,52 @@
             <button class="my-button">9</button>
             <button class="my-button">=</button>
         </div>
-        
-
     </div>
 
-    <!-- NOWY, ULEPSZONY JavaScript -->
     <script>
-        // 1. Znajdź nasz ekranik po jego ID
         const display = document.getElementById('display');
-
-        // 2. Znajdź WSZYSTKIE elementy z klasą 'my-button'
         const buttons = document.querySelectorAll('.my-button');
 
-        // 3. Przejdź przez każdy znaleziony przycisk i dodaj mu "słuchacza"
         buttons.forEach(function(button) {
-            
-            // 4. To się stanie, gdy przycisk zostanie kliknięty
             button.addEventListener('click', function() {
-                
-                const buttonText = button.textContent; // Np. "1", "+", "C"
-                const currentDisplay = display.textContent; // Np. "123"
+                const buttonText = button.textContent;
+                const currentDisplay = display.textContent;
                 const operators = '+-*/';
                 const lastChar = currentDisplay.charAt(currentDisplay.length - 1);
 
-                // --- PRZEBUDOWANA LOGIKA ---
-
                 if (buttonText === 'C') {
-                    // 1. Przycisk 'C' (Wyczyść)
                     display.textContent = '0';
-                
                 } else if (buttonText === '=') {
-                    // 2. Przycisk '=' (Oblicz)
                     try {
-                        // Sprawdzamy, czy ostatni znak nie jest operatorem przed obliczeniem
                         if (operators.includes(lastChar)) {
-                             display.textContent = 'Błąd'; // Nie można zakończyć operatorem
+                             display.textContent = 'Błąd';
                         } else {
-                            // Używamy new Function() do obliczenia
-                            // To jest trochę bezpieczniejsze niż eval()
                             const result = new Function('return ' + currentDisplay)();
                             display.textContent = result;
                         }
                     } catch (error) {
-                        // Jeśli użytkownik wpisał coś błędnego, np. "5++3"
                         display.textContent = 'Błąd';
                     }
-
                 } else if (operators.includes(buttonText)) {
-                    // 3. Przyciski operatorów (+, -, *, /)
-                    
                     if (currentDisplay === 'Błąd') {
-                         // Po błędzie, zacznij nowe działanie od 0
                         display.textContent = '0' + buttonText;
                     } else if (operators.includes(lastChar)) {
-                        // Jeśli ostatni znak TO TEŻ operator, zamień go
-                        // np. "5+" kliknięto "*" -> "5*"
                         display.textContent = currentDisplay.slice(0, -1) + buttonText;
                     } else {
-                        // W przeciwnym razie, po prostu dodaj operator
                         display.textContent += buttonText;
                     }
-
                 } else {
-                    // 4. Przyciski cyfr (0-9)
-                    
                     if (currentDisplay === '0' || currentDisplay === 'Błąd') {
-                        // Jeśli jest "0" lub "Błąd", zastąp go nową cyfrą
-                        // Specjalny przypadek: jeśli jest 0 i klikniemy 0, nic nie rób (zapobiega "0000")
                         if (currentDisplay === '0' && buttonText === '0') {
-                            // nie rób nic
                         } else {
                              display.textContent = buttonText;
                         }
                     } else {
-                        // W przeciwnym razie, dopisz cyfrę
                         display.textContent += buttonText;
                     }
                 }
-                
             });
         });
-
     </script>
-
 </body>
 </html>
-
