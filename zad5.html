@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formularz Przelewu</title>
+    <style>
+        /* Podstawowe style dla body */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Główny kontener na formularz */
+        .form-container {
+            position: relative; /* Kluczowe dla pozycjonowania pól */
+            width: 100%;
+            max-width: 1000px; /* Maksymalna szerokość dla czytelności */
+            margin: auto;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* Obraz tła formularza */
+        .background-image {
+            width: 100%;
+            height: auto;
+            display: block; /* Usuwa zbędne miejsce pod obrazkiem */
+        }
+
+        /* Kontener na wszystkie pola input, nałożony na obraz */
+        .fields-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Ogólny styl dla wszystkich pól input */
+        .fields-overlay input[type="text"] {
+            position: absolute;
+            background: transparent; /* Przezroczyste tło */
+            border: none; /* Bez obramowania */
+            
+            /* * Używamy fontu monospaced (np. Courier) i dostosowujemy
+             * rozmiar oraz odstępy, aby tekst lepiej pasował do kratek.
+             * Te wartości mogą wymagać drobnej korekty w Twojej przeglądarce.
+             */
+            font-family: 'Courier New', Courier, monospace;
+            
+            /* * Rozmiar fontu i odstępy między literami są kluczowe.
+             * Użyłem wartości, które powinny dobrze skalować się z kontenerem.
+             * Możesz je dostosować, jeśli litery nie trafiają w kratki.
+             */
+            font-size: 1.6vw; /* Rozmiar fontu skalowany do szerokości widoku */
+            letter-spacing: 0.55vw; /* Odstępy między literami, aby wypełnić kratki */
+            
+            /* * Używamy vw (viewport width) dla font-size i letter-spacing,
+             * ale są one powiązane z szerokością kontenera.
+             * Lepszym rozwiązaniem dla skalowania wewnątrz kontenera 
+             * byłoby użycie JS, ale dla prostoty i CSS użyjemy triku:
+             * Te wartości zadziałają dobrze, dopóki .form-container ma max-width: 1000px.
+             * Przy mniejszych ekranach, użyjemy media query.
+             */
+            
+            padding-left: 0.5%; /* Mały padding od lewej */
+            box-sizing: border-box; /* Ważne dla poprawnego obliczania szerokości */
+            color: #000;
+            font-weight: bold;
+        }
+        
+        /* Media query dla mniejszych ekranów (np. telefony) */
+        @media (max-width: 600px) {
+            .fields-overlay input[type="text"] {
+                /* Zmniejszamy font i odstępy na mniejszych ekranach */
+                font-size: 2.5vw;
+                letter-spacing: 0.8vw;
+            }
+        }
+
+        /* * Pozycjonowanie absolutne każdego pola.
+         * Wartości top, left, width, height są w procentach,
+         * aby skalowały się razem z rozmiarem obrazka.
+         * Wymagało to estymacji na podstawie podglądu obrazu.
+         */
+
+        /* --- Pola Odbiorcy --- */
+        #nazwa-odbiorcy-1 {
+            top: 10.5%;
+            left: 8.5%;
+            width: 82%;
+            height: 3.5%;
+        }
+        
+        #nazwa-odbiorcy-2 {
+            top: 14%;
+            left: 8.5%;
+            width: 82%;
+            height: 3.5%;
+        }
+        
+        #nr-rachunku-odbiorcy {
+            top: 21%;
+            left: 24%;
+            width: 44.5%; /* Dokładna szerokość, aby pasowało do kratek */
+            height: 3.5%;
+            letter-spacing: 0.6vw; /* Inny 'letter-spacing' dla numeru konta */
+        }
+        
+        #kwota {
+            top: 21%;
+            left: 71.5%;
+            width: 19%;
+            height: 3.5%;
+            letter-spacing: 0.6vw;
+            text-align: right; /* Kwota zwykle wyrównana do prawej */
+            padding-right: 1.5%;
+        }
+
+        /* --- Pola Zleceniodawcy --- */
+        #nazwa-zleceniodawcy-1 {
+            top: 36.5%;
+            left: 8.5%;
+            width: 82%;
+            height: 3.5%;
+        }
+        
+        #nazwa-zleceniodawcy-2 {
+            top: 40%;
+            left: 8.5%;
+            width: 82%;
+            height: 3.5%;
+        }
+
+        /* --- Tytułem (3 linijki) --- */
+        #tytulem-1 {
+            top: 53.5%;
+            left: 8.5%;
+            width: 82%;
+            height: 3.5%;
+            letter-spacing: normal; /* Normalny 'letter-spacing' dla tytułu */
+            font-size: 1.2vw; /* Mniejszy font dla tytułu */
+        }
+        
+        #tytulem-2 {
+            top: 57%;
+            left: 8.5%;
+            width: 82%;
+            height: 3.5%;
+            letter-spacing: normal;
+            font-size: 1.2vw;
+        }
+        
+        #tytulem-3 {
+            top: 60.5%;
+            left: 8.5%;
+            width: 82%;
+            height: 3.5%;
+            letter-spacing: normal;
+            font-size: 1.2vw;
+        }
+
+        /* Dodatkowy styl dla 'focus' (gdy klikniemy w pole) */
+        .fields-overlay input[type="text"]:focus {
+            outline: none; /* Usuwa domyślną ramkę focus */
+            background: rgba(255, 255, 0, 0.1); /* Lekkie podświetlenie dla użyteczności */
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Główny kontener formularza -->
+    <div class="form-container">
+        
+        <!-- Obraz tła -->
+        <img src="image_06e2c4.png" alt="Formularz przelewu" class="background-image"
+             onerror="this.style.display='none'; document.getElementById('error-msg').style.display='block';" />
+        
+        <!-- Komunikat błędu, jeśli obraz się nie załaduje -->
+        <div id="error-msg" style="display:none; padding: 20px; color: red; text-align: center;">
+            <strong>Błąd:</strong> Nie można załadować obrazu tła 'image_06e2c4.png'.<br>
+            Upewnij się, że plik znajduje się w tym samym folderze co plik HTML.
+        </div>
+
+        <!-- Nakładka z polami formularza -->
+        <div class="fields-overlay">
+            <form id="przelew-form">
+                
+                <!-- Pola Odbiorcy -->
+                <input type="text" id="nazwa-odbiorcy-1" name="nazwa-odbiorcy-1" class="name-field" maxlength="35">
+                <input type="text" id="nazwa-odbiorcy-2" name="nazwa-odbiorcy-2" class="name-field" maxlength="35">
+                <input type="text" id="nr-rachunku-odbiorcy" name="nr-rachunku-odbiorcy" class="account-field" maxlength="26">
+                <input type="text" id="kwota" name="kwota" class="amount-field">
+                
+                <!-- Pola Zleceniodawcy -->
+                <input type="text" id="nazwa-zleceniodawcy-1" name="nazwa-zleceniodawcy-1" class="name-field" maxlength="35">
+                <input type="text" id="nazwa-zleceniodawcy-2" name="nazwa-zleceniodawcy-2" class="name-field" maxlength="35">
+                
+                <!-- Tytułem -->
+                <input type="text" id="tytulem-1" name="tytulem-1" class="title-field">
+                <input type="text" id="tytulem-2" name="tytulem-2" class="title-field">
+                <input type="text" id="tytulem-3" name="tytulem-3" class="title-field">
+                
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Czekamy, aż cały dokument HTML się załaduje
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // --- Walidacja dla pól Imię/Nazwisko/Nazwa ---
+            // Pobieramy wszystkie pola, które mają klasę 'name-field'
+            const nameInputs = document.querySelectorAll('.name-field');
+            
+            // Funkcja do usuwania cyfr
+            function validateName(e) {
+                // 'this' odnosi się do pola input, które wywołało zdarzenie
+                // Używamy wyrażenia regularnego / \d /g do znalezienia wszystkich cyfr (d) globalnie (g)
+                // i zastępujemy je pustym ciągiem znaków ''
+                this.value = this.value.replace(/\d/g, '');
+            }
+            
+            // Dodajemy 'słuchacza' zdarzeń do każdego pola 'name-field'
+            // Zdarzenie 'input' jest wywoływane przy każdej zmianie wartości pola
+            nameInputs.forEach(function(input) {
+                input.addEventListener('input', validateName);
+            });
+
+            // --- Walidacja dla pola Numer Konta ---
+            // Pobieramy pole o ID 'nr-rachunku-odbiorcy'
+            const accountInput = document.getElementById('nr-rachunku-odbiorcy');
+            
+            if (accountInput) {
+                // Funkcja do usuwania liter i innych znaków (zostawia tylko cyfry)
+                function validateAccount(e) {
+                    // Używamy wyrażenia regularnego / [^0-9] /g
+                    // ^ - oznacza "nie"
+                    // 0-9 - oznacza zakres cyfr
+                    // Czyli "znajdź wszystko, co NIE jest cyfrą" i zastąp pustym ciągiem
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                }
+                
+                // Dodajemy 'słuchacza' do pola numeru konta
+                accountInput.addEventListener('input', validateAccount);
+            }
+
+            // --- Walidacja dla pola Kwota (zezwala na cyfry, przecinek, kropkę) ---
+            const amountInput = document.getElementById('kwota');
+            
+            if (amountInput) {
+                function validateAmount(e) {
+                    // Zezwalamy tylko na cyfry, jeden przecinek lub jedną kropkę
+                    // Usuwamy wszystko, co nie jest cyfrą, przecinkiem lub kropką
+                    let value = this.value.replace(/[^0-9.,]/g, '');
+                    
+                    // Zapewniamy, że jest tylko jeden separator (przecinek lub kropka)
+                    // Najpierw zamieniamy kropki na przecinki dla spójności
+                    value = value.replace(/\./g, ',');
+                    
+                    // Dzielimy wartość po przecinku
+                    const parts = value.split(',');
+                    
+                    // Jeśli jest więcej niż jeden przecinek, sklejamy z powrotem, 
+                    // biorąc tylko pierwszą część i pierwszą część po przecinku
+                    if (parts.length > 2) {
+                        value = parts[0] + ',' + parts.slice(1).join('');
+                    }
+                    
+                    this.value = value;
+                }
+                
+                amountInput.addEventListener('input', validateAmount);
+            }
+        });
+    </script>
+
+</body>
+</html>
