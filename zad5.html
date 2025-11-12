@@ -46,62 +46,55 @@
         .fields-overlay input[type="text"] {
             position: absolute;
             background: transparent; /* Przezroczyste tło */
-            border: none; /* Bez obramowania */
-            font-family: 'Courier New', Courier, monospace;
-            
-            /* * Dostosowanie rozmiaru fontu i odstępów między literami
-             * aby pasowały do kratek. Używamy jednostek vw (viewport width)
+/* ... existing code ... -->
              * aby skalowały się wraz z obrazkiem.
              */
-            font-size: 1.6vw; 
+            font-size: 1.5vw;  /* ZMNIEJSZONO: Mniejsza czcionka łatwiej mieści się w kratce */
             /* Poniższe wartości letter-spacing zostały precyzyjnie obliczone */
-            letter-spacing: 1.63vw; /* Domyślne dla pól z 27 kratkami */
+            letter-spacing: 1.8vw; /* ZWIĘKSZONO: Domyślne dla pól z 27 kratkami */
             
-            padding-left: 0.5%;
+            padding-left: 0.8%; /* ZWIĘKSZONO: Lepsze centrowanie pierwszej litery */
             box-sizing: border-box;
             color: #000;
-            font-weight: bold;
-        }
-        
-        /* Media query dla mniejszych ekranów (np. telefony) */
+/* ... existing code ... -->
         @media (max-width: 600px) {
             body {
                 padding: 5px; /* Mniejszy padding na mobilkach */
             }
+            /* Ogólna zasada dla mobilnych */
             .fields-overlay input[type="text"] {
-                /* Zmniejszamy font i odstępy na mniejszych ekranach */
-                font-size: 2.5vw;
-                letter-spacing: 0.8vw;
+                font-size: 2.4vw;
+                letter-spacing: 2.8vw; /* Zaktualizowano proporcjonalnie */
+                padding-left: 1.2%; /* Zaktualizowano proporcjonalnie */
+            }
+            
+            /* Wyjątki dla pól specjalnych na mobilnych */
+            #nr-rachunku-odbiorcy {
+                font-size: 2.4vw;
+                letter-spacing: 1.2vw; /* Zaktualizowano proporcjonalnie */
+                padding-left: 0.3%;
+            }
+            #kwota {
+                font-size: 2.4vw;
+                letter-spacing: 1.2vw; /* Zaktualizowano proporcjonalnie */
+            }
+            #tytulem-1, #tytulem-2, #tytulem-3 {
+                font-size: 2.0vw;
+                letter-spacing: normal; /* Tytułem bez zmian */
+                padding-left: 0.5%;
             }
         }
 
         /* * Pozycjonowanie absolutne każdego pola w procentach,
-         * aby skalowały się razem z rozmiarem obrazka.
-         * Te koordynaty pasują do obrazka tła z linku.
-         */
-
-        /* --- Pola Odbiorcy --- */
-        #nazwa-odbiorcy-1 {
-            top: 10.5%;
-            left: 8.5%;
-            width: 82%;
-            height: 3.5%;
-        }
-        
-        #nazwa-odbiorcy-2 {
-            top: 14%;
-            left: 8.5%;
-            width: 82%;
-            height: 3.5%;
-        }
-        
+/* ... existing code ... -->
         #nr-rachunku-odbiorcy {
             top: 21%;
             left: 24%;
             width: 44.5%; 
             height: 3.5%;
             /* Specjalny letter-spacing dla numeru konta */
-            letter-spacing: 0.47vw; /* Zaktualizowano dla lepszego dopasowania */
+            letter-spacing: 0.75vw; /* ZWIĘKSZONO: Lepsze dopasowanie cyfr w grupach */
+            padding-left: 0.3%; /* DODANO: Lepsze centrowanie pierwszej cyfry */
         }
         
         #kwota {
@@ -109,210 +102,39 @@
             left: 71.5%;
             width: 19%;
             height: 3.5%;
-            letter-spacing: 0.69vw; /* Zaktualizowano dla lepszego dopasowania */
+            letter-spacing: 0.8vw; /* ZWIĘKSZONO: Lepsze dopasowanie */
             text-align: right; /* Kwota zwykle wyrównana do prawej */
             padding-right: 1.5%;
-        }
-
-        /* --- Pola Zleceniodawcy --- */
-        #nazwa-zleceniodawcy-1 {
-            top: 36.5%;
-            left: 8.5%;
-            width: 82%;
-            height: 3.5%;
-        }
-        
-        #nazwa-zleceniodawcy-2 {
-            top: 40%;
-            left: 8.5%;
-            width: 82%;
-            height: 3.5%;
-        }
-
-        /* --- Tytułem (3 linijki) --- */
+/* ... existing code ... -->
         #tytulem-1 {
             top: 53.5%;
             left: 8.5%;
-            width: 82%;
+/* ... existing code ... -->
             height: 3.5%;
-            letter-spacing: normal; /* Normalny 'letter-spacing' dla tytułu */
-            font-size: 1.2vw; /* Mniejszy font dla tytułu */
+            letter-spacing: normal; /* Normalny 'letter-spacing' dla tytułu (BEZ ZMIAN) */
+            font-size: 1.2vw; /* Mniejszy font dla tytułu (BEZ ZMIAN) */
+            padding-left: 0.5%; /* Przywrócenie domyślnego paddingu */
         }
         
         #tytulem-2 {
-            top: 57%;
+/* ... existing code ... -->
             left: 8.5%;
             width: 82%;
             height: 3.5%;
             letter-spacing: normal;
             font-size: 1.2vw;
+            padding-left: 0.5%;
         }
         
         #tytulem-3 {
-            top: 60.5%;
+/* ... existing code ... -->
             left: 8.5%;
             width: 82%;
             height: 3.5%;
             letter-spacing: normal;
             font-size: 1.2vw;
+            padding-left: 0.5%;
         }
 
         /* Dodatkowy styl dla 'focus' (gdy klikniemy w pole) */
-        .fields-overlay input[type="text']:focus {
-            outline: none; /* Usuwa domyślną ramkę focus */
-            background: rgba(255, 255, 200, 0.2); /* Lekkie żółte podświetlenie */
-        }
-
-    </style>
-</head>
-<body>
-
-    <!-- Główny kontener formularza -->
-    <div class="form-container">
-        
-        <!-- Zaktualizowany obraz tła na Twój nowy plik -->
-        <img src="5b35db272c392_p.jpg" 
-             alt="Formularz przelewu" 
-             class="background-image"
-             onerror="this.style.display='none'; document.getElementById('error-msg').style.display='block';" />
-        
-        <!-- Zaktualizowany komunikat błędu -->
-        <div id="error-msg" style="display:none; padding: 20px; color: red; text-align: center;">
-            <strong>Błąd:</strong> Nie można załadować obrazu tła '5b35db272c392_p.jpg'.<br>
-            Upewnij się, że plik obrazu jest w tym samym folderze co plik HTML.
-        </div>
-
-        <!-- Nakładka z polami formularza -->
-        <div class="fields-overlay">
-            <form id="przelew-form" autocomplete="off">
-                
-                <!-- Pola Odbiorcy -->
-                <input type="text" id="nazwa-odbiorcy-1" name="nazwa-odbiorcy-1" class="name-field" maxlength="27">
-                <input type="text" id="nazwa-odbiorcy-2" name="nazwa-odbiorcy-2" class="name-field" maxlength="27">
-                <input type="text" id="nr-rachunku-odbiorcy" name="nr-rachunku-odbiorcy" class="account-field" maxlength="32"> <!-- 26 cyfr + 6 spacji -->
-                <input type="text" id="kwota" name="kwota" class="amount-field" maxlength="11"> <!-- 8 cyfr + przecinek + 2 cyfry -->
-                
-                <!-- Pola Zleceniodawcy -->
-                <input type="text" id="nazwa-zleceniodawcy-1" name="nazwa-zleceniodawcy-1" class="name-field" maxlength="27">
-                <input type="text" id="nazwa-zleceniodawcy-2" name="nazwa-zleceniodawcy-2" class="name-field" maxlength="27">
-                
-                <!-- Tytułem -->
-                <input type="text" id="tytulem-1" name="tytulem-1" class="title-field">
-                <input type="text" id="tytulem-2" name="tytulem-2" class="title-field">
-                <input type="text" id="tytulem-3" name="tytulem-3" class="title-field">
-                
-            </form>
-        </div>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            
-            // --- Walidacja dla pól Imię/Nazwisko/Nazwa (bez cyfr) ---
-            const nameInputs = document.querySelectorAll('.name-field');
-            
-            function validateName(e) {
-                // Zapamiętujemy pozycję kursora
-                const start = this.selectionStart;
-                const end = this.selectionEnd;
-                const oldValue = this.value;
-                
-                this.value = this.value.replace(/\d/g, ''); // Usuwamy cyfry
-                
-                // Przywracamy pozycję kursora, jeśli wartość się zmieniła
-                if (oldValue.length !== this.value.length) {
-                    // Obliczamy, ile cyfr usunięto przed kursorem
-                    const removedBefore = oldValue.substring(0, start).replace(/\d/g, '').length;
-                    this.setSelectionRange(removedBefore, removedBefore);
-                } else {
-                    this.setSelectionRange(start, end);
-                }
-            }
-            
-            nameInputs.forEach(input => {
-                input.addEventListener('input', validateName);
-            });
-
-            // --- Walidacja i FORMATOWANIE dla pola Numer Konta (dodaje spacje) ---
-            const accountInput = document.getElementById('nr-rachunku-odbiorcy');
-            
-            if (accountInput) {
-                function formatAccount(e) {
-                    const input = this;
-                    const selectionStart = input.selectionStart;
-                    let value = input.value.replace(/\D/g, ''); // Usuwamy wszystko oprócz cyfr
-                    let formattedValue = '';
-
-                    if (value.length > 0) {
-                        formattedValue = value.substring(0, 2);
-                    }
-                    if (value.length > 2) {
-                        formattedValue += ' ' + value.substring(2, 6);
-                    }
-                    if (value.length > 6) {
-                        formattedValue += ' ' + value.substring(6, 10);
-                    }
-                    if (value.length > 10) {
-                        formattedValue += ' ' + value.substring(10, 14);
-                    }
-                    if (value.length > 14) {
-                        formattedValue += ' ' + value.substring(14, 18);
-                    }
-                    if (value.length > 18) {
-                        formattedValue += ' ' + value.substring(18, 22);
-                    }
-                    if (value.length > 22) {
-                        formattedValue += ' ' + value.substring(22, 26);
-                    }
-
-                    // Obliczamy nową pozycję kursora, aby nie skakał na koniec
-                    // To jest kluczowe dla dobrej użyteczności
-                    let newCursorPos = selectionStart;
-                    // Jeśli dodaliśmy spację przed kursorem, przesuń kursor
-                    if (input.value.length < formattedValue.length && input.value[selectionStart - 1] === ' ') {
-                        newCursorPos = selectionStart + 1;
-                    }
-                    // Jeśli usunęliśmy spację przed kursorem
-                    if (input.value.length > formattedValue.length && input.value[selectionStart] === ' ') {
-                        newCursorPos = selectionStart - 1;
-                    }
-
-                    input.value = formattedValue;
-                    input.setSelectionRange(newCursorPos, newCursorPos);
-                }
-                
-                accountInput.addEventListener('input', formatAccount);
-            }
-
-            // --- Walidacja dla pola Kwota (zezwala na cyfry i jeden przecinek) ---
-            const amountInput = document.getElementById('kwota');
-            
-            if (amountInput) {
-                function validateAmount(e) {
-                    let value = this.value;
-                    // 1. Zamień kropki na przecinki
-                    value = value.replace(/\./g, ',');
-                    // 2. Usuń wszystko co nie jest cyfrą lub przecinkiem
-                    value = value.replace(/[^0-9,]/g, '');
-                    
-                    // 3. Sprawdź, czy jest więcej niż jeden przecinek
-                    const parts = value.split(',');
-                    if (parts.length > 2) {
-                        value = parts[0] + ',' + parts.slice(1).join('');
-                    }
-                    
-                    // 4. Ogranicz do 2 miejsc po przecinku
-                    if (parts[1] && parts[1].length > 2) {
-                        value = parts[0] + ',' + parts[1].substring(0, 2);
-                    }
-                    
-                    this.value = value;
-                }
-                
-                amountInput.addEventListener('input', validateAmount);
-            }
-        });
-    </script>
-
-</body>
-</html>
+/* ... existing code ... -->
