@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Przelew v3 - Logic & Fix</title>
+    <title>Przelew v4 - Kalibracja</title>
     <style>
         body {
             background-color: #333;
@@ -14,7 +14,7 @@
 
         .form-wrapper {
             position: relative;
-            width: 1000px; /* Baza odniesienia */
+            width: 1000px; /* Stała szerokość - nasza baza */
         }
 
         .form-bg {
@@ -26,46 +26,50 @@
         .input-field {
             position: absolute;
             background: transparent;
-            border: none; /* Brak ramki dla realizmu */
-            
-            /* Odkomentuj poniższe, aby widzieć granice pól przy kalibracji */
-            /* border: 1px solid rgba(255, 0, 0, 0.3); */
-            
-            font-family: 'Courier New', Courier, monospace; /* Musi być monospaced */
+            border: none; 
+            /* border: 1px solid red;  <-- Odkomentuj, jeśli chcesz widzieć granice */
+            font-family: 'Courier New', Courier, monospace; /* Stała szerokość znaku */
             font-weight: bold;
             color: #000;
             padding: 0;
             margin: 0;
             outline: none;
-            line-height: 1; /* Ważne dla wyrównania w pionie */
+            line-height: 1;
         }
 
-        /* --- KALIBRACJA (Dostrojone na podstawie Twojego screenshota) --- */
+        /* --- KALIBRACJA V4 --- */
 
-        /* 1. Nazwa Odbiorcy */
+        /* 1. Nazwa Odbiorcy - Poprawione */
         #input-nazwa {
-            top: 43px;          /* Minimalnie w dół, żeby było centralnie w pionie */
-            left: 156px;        /* Przesunięte w prawo - na screenie "A" wychodziło za linię */
+            top: 43px;          
+            left: 156px;        
             width: 810px;
             height: 30px;
             font-size: 24px;    
-            letter-spacing: 13.8px; /* Zmniejszone minimalnie, żeby nie uciekało na końcu */
-            text-transform: uppercase; /* Automatycznie duże litery */
+            
+            /* BYŁO: 13.8px -> ZMNIEJSZAM DO: 13.2px */
+            /* Tekst uciekał w prawo, więc musimy go ścisnąć */
+            letter-spacing: 13.2px; 
+            
+            text-transform: uppercase;
         }
 
-        /* 2. Numer Rachunku */
+        /* 2. Numer Rachunku - Poprawione */
         #input-konto {
-            top: 132px;         /* Podniesione do góry - na screenie litery leżały na linii */
+            top: 134px;         /* Minimalna korekta w dół (z 132 na 134), żeby było idealnie w środku */
             left: 155px;
             width: 800px;
             height: 35px;
             font-size: 24px;
-            letter-spacing: 13.7px; /* Osobny spacing dla numeru konta */
+            
+            /* BYŁO: 13.7px -> ZMNIEJSZAM DO: 13.2px */
+            /* Tu też tekst dryfował w prawo */
+            letter-spacing: 13.2px; 
         }
 
-        /* 3. Kwota */
+        /* 3. Kwota - BEZ ZMIAN (jest super) */
         #input-kwota {
-            top: 182px;         /* Minimalna korekta w górę */
+            top: 182px;         
             left: 585px;
             width: 360px;
             height: 35px;
@@ -93,34 +97,24 @@
     </div>
 
     <script>
-        /**
-         * Logika walidacji (JavaScript)
-         * Jako student informatyki na pewno kojarzysz Regex (Wyrażenia regularne).
-         */
+        /* LOGIKA WALIDACJI (JavaScript) */
 
-        // 1. Tylko litery (polskie znaki też) i spacje
         function validateName(input) {
-            // Usuwa wszystko co NIE jest literą (a-z) lub polskim znakiem lub spacją
+            // Tylko litery i spacje
             input.value = input.value.replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]/g, '');
-            input.value = input.value.toUpperCase(); // Wymuś duże litery
+            input.value = input.value.toUpperCase();
         }
 
-        // 2. Tylko cyfry (Numer konta)
         function validateAccount(input) {
-            // Usuwa wszystko co nie jest cyfrą 0-9
+            // Tylko cyfry
             input.value = input.value.replace(/[^0-9]/g, '');
         }
 
-        // 3. Kwota (Cyfry i przecinek/kropka)
         function validateAmount(input) {
-            // Zamień kropkę na przecinek (standard polski)
+            // Zamiana kropki na przecinek + tylko cyfry
             input.value = input.value.replace('.', ',');
-            // Pozwól tylko na cyfry i przecinek
             input.value = input.value.replace(/[^0-9,]/g, '');
-            
-            // Zabezpieczenie przed podwójnym przecinkiem (prosta logika)
             if ((input.value.match(/,/g) || []).length > 1) {
-                // Jeśli jest więcej niż jeden przecinek, usuń ostatni znak
                 input.value = input.value.slice(0, -1);
             }
         }
