@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Przelew v5 - Tytuł zamiast Konta</title>
+    <title>Przelew v6 - Styl Kwoty Wszędzie</title>
     <style>
         body {
             background-color: #333;
@@ -23,12 +23,12 @@
             user-select: none;
         }
 
+        /* WSPÓLNY STYL BAZOWY (Taki sam jak w Kwocie) */
         .input-field {
             position: absolute;
             background: transparent;
             border: none; 
-            /* ODKOMENTUJ PONIŻSZĄ LINIĘ, ABY ZOBACZYĆ GDZIE SĄ POLA (Czerwona ramka) */
-            /* border: 1px solid red; */
+            /* border: 1px solid red; <--- Odkomentuj, jeśli chcesz widzieć ramki */
             
             font-family: 'Courier New', Courier, monospace; 
             font-weight: bold;
@@ -37,42 +37,44 @@
             margin: 0;
             outline: none;
             line-height: 1;
+
+            /* KLUCZOWE WARTOŚCI Z POLA KWOTA: */
+            font-size: 24px;
+            letter-spacing: 14px; 
         }
 
-        /* --- KALIBRACJA v5 --- */
+        /* --- POZYCJONOWANIE --- */
 
         /* 1. Nazwa Odbiorcy */
         #input-nazwa {
-            top: 46px;          /* Obniżone o 3px względem poprzedniej wersji */
-            left: 156px;        
-            width: 810px;
-            height: 30px;
-            font-size: 24px;    
-            letter-spacing: 12.9px; /* Ściśnięte jeszcze bardziej (było 13.2px) */
+            top: 45px;         
+            left: 155px;       
+            width: 815px;
+            height: 35px;
+            text-align: left; /* Nazwa wyrównana do lewej */
+            padding-left: 5px; /* Minimalna korekta startowa */
             text-transform: uppercase;
         }
 
-        /* 2. Tytułem (Nowe pole zamiast konta) */
-        /* UWAGA: To jest wyliczone na ok. 6 rząd kratek */
+        /* 2. Tytułem */
+        /* Poprzednio było 270px i trafiło w złe pole. Teraz celujemy w 7. rząd kratek */
         #input-tytul {
-            top: 270px;         /* Szacowana pozycja dla pola 'Tytułem' */
-            left: 156px;        /* Ten sam start co nazwa */
-            width: 810px;
-            height: 30px;
-            font-size: 24px;
-            letter-spacing: 12.9px; /* Taka sama siatka jak w nazwie */
+            top: 405px;        /* Znacznie niżej - celujemy w pole "tytułem" */
+            left: 155px;       /* Ten sam start co nazwa */
+            width: 815px;
+            height: 35px;
+            text-align: left;
+            padding-left: 5px;
             text-transform: uppercase;
         }
 
-        /* 3. Kwota (Bez zmian) */
+        /* 3. Kwota (BEZ ZMIAN - IDEAŁ) */
         #input-kwota {
             top: 182px;         
             left: 585px;
             width: 360px;
             height: 35px;
-            font-size: 24px;
-            text-align: right;
-            letter-spacing: 14px;
+            text-align: right; /* Kwota do prawej */
             padding-right: 15px;
         }
 
@@ -84,7 +86,7 @@
         <img src="5b35db272c392_p.jpg" alt="Wzór przelewu" class="form-bg">
 
         <input type="text" id="input-nazwa" class="input-field" maxlength="27" 
-               placeholder="NAZWA ODBIORCY" oninput="validateName(this)">
+               placeholder="NAZWA" oninput="validateName(this)">
         
         <input type="text" id="input-tytul" class="input-field" maxlength="27" 
                placeholder="TYTUŁEM" oninput="validateTitle(this)">
@@ -102,9 +104,8 @@
             input.value = input.value.toUpperCase();
         }
 
-        // 2. Tytuł: Litery, Cyfry, Myślniki, Ukośniki (np. FV/2024)
+        // 2. Tytuł: Litery i Cyfry
         function validateTitle(input) {
-            // Pozwalamy na trochę więcej znaków niż w nazwie
             input.value = input.value.replace(/[^a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\/\-\.]/g, '');
             input.value = input.value.toUpperCase();
         }
