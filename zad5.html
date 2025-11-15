@@ -2,80 +2,76 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interaktywny Przelew</title>
+    <title>Przelew v2 - Poprawiony</title>
     <style>
         body {
+            background-color: #333;
             display: flex;
             justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            background-color: #333; /* Ciemne tło strony, żeby formularz się wyróżniał */
-            font-family: sans-serif;
+            padding-top: 20px;
         }
 
-        /* Główny kontener - to jest nasze "płótno" */
         .form-wrapper {
-            position: relative; /* Kluczowe: elementy wewnątrz pozycjonujemy względem tego bloku */
-            width: 1000px;      /* Ustalamy sztywną szerokość dla precyzji */
-            background-color: #fff;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            position: relative;
+            width: 1000px; /* Sztywna szerokość bazy */
+            /* Wysokość dopasuje się do obrazka */
         }
 
-        /* Obrazek tła */
         .form-bg {
             width: 100%;
             display: block;
-            /* To sprawia, że obrazek nie reaguje na kliknięcia, ułatwia klikanie w inputy */
-            pointer-events: none; 
-            user-select: none;
         }
 
-        /* Wspólny styl dla wszystkich pól tekstowych */
         .input-field {
             position: absolute;
-            background-color: rgba(255, 255, 255, 0.3); /* Lekko widoczne tło, żebyś wiedział gdzie są (zmień na 0 dla pełnej przezroczystości) */
-            border: 1px solid red; /* Czerwona ramka do testów - usuń ją (border: none) jak skończysz kalibrację! */
-            font-family: 'Courier New', Courier, monospace; /* Czcionka o stałej szerokości */
-            font-size: 22px;
+            background: transparent; /* Usuwamy tło, żeby nie zasłaniać kratek */
+            border: none; /* Usuwamy ramki docelowo */
+            
+            /* PONIŻEJ: Włącz to do testów, żeby widzieć gdzie są pola */
+            /* border: 1px solid rgba(255, 0, 0, 0.5); background: rgba(255, 255, 0, 0.2); */
+            
+            font-family: 'Courier New', Courier, monospace; /* Monospace jest kluczowy! */
+            font-weight: bold;
             color: #000;
-            padding: 0 5px;
+            padding: 0;
+            margin: 0;
             outline: none;
+            z-index: 10;
         }
 
-        /* --- POZYCJONOWANIE PÓL (Musisz to dostroić "na oko" pod swój obrazek) --- */
+        /* --- KALIBRACJA PÓL (Wartości w PX dla szerokości 1000px) --- */
 
-        /* 1. Nazwa Odbiorcy (górne pole) */
+        /* 1. Nazwa Odbiorcy */
         #input-nazwa {
-            top: 6%;       /* Odległość od góry */
-            left: 15%;     /* Odległość od lewej */
-            width: 80%;    /* Szerokość pola */
+            top: 40px;         /* Przesunięcie od góry */
+            left: 148px;       /* Start pierwszej kratki */
+            width: 815px;
             height: 35px;
+            font-size: 23px;   /* Dobrany rozmiar czcionki */
+            letter-spacing: 14.2px; /* Rozstrzelenie liter do kratek */
             text-transform: uppercase;
         }
 
-        /* 2. Numer Rachunku (to długie pole z kratkami) */
+        /* 2. Numer Rachunku */
         #input-konto {
-            top: 21.5%;
-            left: 15%;
-            width: 78%;
-            height: 38px;
-            font-size: 26px;
-            
-            /* MAGIA: Rozstrzelenie znaków, żeby trafiały w kratki */
-            letter-spacing: 13.5px; 
-            padding-left: 12px; /* Przesunięcie startowe pierwszego znaku */
-            border-color: blue; /* Dla odróżnienia */
+            top: 138px;
+            left: 148px;
+            width: 800px;
+            height: 35px;
+            font-size: 23px;
+            letter-spacing: 14.3px; /* Minimalnie inne niż wyżej */
         }
 
-        /* 3. Kwota */
+        /* 3. Kwota (To było najbardziej zepsute) */
         #input-kwota {
-            top: 30%;
-            left: 60%;
-            width: 30%;
-            height: 40px;
-            font-size: 24px;
-            text-align: right; /* Kwota zwykle do prawej */
+            top: 185px;        /* Podciągnięte mocno w górę */
+            left: 585px;       /* Przesunięte w prawo do pola kwoty */
+            width: 360px;
+            height: 35px;
+            font-size: 23px;
+            text-align: right; /* Kwota do prawej */
+            letter-spacing: 14px;
+            padding-right: 10px;
         }
 
     </style>
@@ -85,11 +81,9 @@
     <div class="form-wrapper">
         <img src="5b35db272c392_p.jpg" alt="Wzór przelewu" class="form-bg">
 
-        <input type="text" id="input-nazwa" class="input-field" placeholder="Nazwa odbiorcy" autocomplete="off">
-        
-        <input type="text" id="input-konto" class="input-field" maxlength="27" placeholder="XX XXXX..." autocomplete="off">
-        
-        <input type="text" id="input-kwota" class="input-field" placeholder="0,00" autocomplete="off">
+        <input type="text" id="input-nazwa" class="input-field" value="JAN KOWALSKI">
+        <input type="text" id="input-konto" class="input-field" value="12345678901234567890123456">
+        <input type="text" id="input-kwota" class="input-field" value="1250,00">
     </div>
 
 </body>
