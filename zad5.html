@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Przelew v6 - Styl Kwoty Wszędzie</title>
+    <title>Przelew v7 - Final Adjust</title>
     <style>
         body {
             background-color: #333;
@@ -23,13 +23,10 @@
             user-select: none;
         }
 
-        /* WSPÓLNY STYL BAZOWY (Taki sam jak w Kwocie) */
         .input-field {
             position: absolute;
             background: transparent;
             border: none; 
-            /* border: 1px solid red; <--- Odkomentuj, jeśli chcesz widzieć ramki */
-            
             font-family: 'Courier New', Courier, monospace; 
             font-weight: bold;
             color: #000;
@@ -37,45 +34,55 @@
             margin: 0;
             outline: none;
             line-height: 1;
-
-            /* KLUCZOWE WARTOŚCI Z POLA KWOTA: */
-            font-size: 24px;
-            letter-spacing: 14px; 
+            font-size: 24px; /* Rozmiar czcionki stały */
         }
 
-        /* --- POZYCJONOWANIE --- */
+        /* --- DEDYKOWANE KALIBRACJE --- */
 
         /* 1. Nazwa Odbiorcy */
+        /* Problem: tekst uciekał w prawo -> Zmniejszamy spacing */
         #input-nazwa {
             top: 45px;         
             left: 155px;       
             width: 815px;
             height: 35px;
-            text-align: left; /* Nazwa wyrównana do lewej */
-            padding-left: 5px; /* Minimalna korekta startowa */
+            text-align: left;
+            padding-left: 5px;
+            
+            /* KOREKTA: Zmniejszone z 14px na 13.3px */
+            letter-spacing: 13.3px; 
+            
             text-transform: uppercase;
         }
 
         /* 2. Tytułem */
-        /* Poprzednio było 270px i trafiło w złe pole. Teraz celujemy w 7. rząd kratek */
+        /* Problem: był za nisko i za szeroko */
         #input-tytul {
-            top: 405px;        /* Znacznie niżej - celujemy w pole "tytułem" */
-            left: 155px;       /* Ten sam start co nazwa */
+            top: 385px;        /* PODNIESIONE o 20px (było 405px) */
+            left: 155px;       
             width: 815px;
             height: 35px;
             text-align: left;
             padding-left: 5px;
+            
+            /* KOREKTA: Też zmniejszamy, bo to ta sama siatka co wyżej */
+            letter-spacing: 13.3px; 
+            
             text-transform: uppercase;
         }
 
-        /* 3. Kwota (BEZ ZMIAN - IDEAŁ) */
+        /* 3. Kwota */
+        /* To było dobre, więc NIE ZMIENIAMY */
         #input-kwota {
             top: 182px;         
             left: 585px;
             width: 360px;
             height: 35px;
-            text-align: right; /* Kwota do prawej */
+            text-align: right;
             padding-right: 15px;
+            
+            /* Zostawiamy 14px, bo tutaj pasowało */
+            letter-spacing: 14px; 
         }
 
     </style>
@@ -86,7 +93,7 @@
         <img src="5b35db272c392_p.jpg" alt="Wzór przelewu" class="form-bg">
 
         <input type="text" id="input-nazwa" class="input-field" maxlength="27" 
-               placeholder="NAZWA" oninput="validateName(this)">
+               placeholder="NAZWA ODBIORCY" oninput="validateName(this)">
         
         <input type="text" id="input-tytul" class="input-field" maxlength="27" 
                placeholder="TYTUŁEM" oninput="validateTitle(this)">
@@ -96,27 +103,17 @@
     </div>
 
     <script>
-        /* LOGIKA WALIDACJI */
-
-        // 1. Nazwa: Tylko litery
         function validateName(input) {
-            input.value = input.value.replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]/g, '');
-            input.value = input.value.toUpperCase();
+            input.value = input.value.replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]/g, '').toUpperCase();
         }
 
-        // 2. Tytuł: Litery i Cyfry
         function validateTitle(input) {
-            input.value = input.value.replace(/[^a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\/\-\.]/g, '');
-            input.value = input.value.toUpperCase();
+            input.value = input.value.replace(/[^a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\/\-\.]/g, '').toUpperCase();
         }
 
-        // 3. Kwota: Cyfry i przecinek
         function validateAmount(input) {
-            input.value = input.value.replace('.', ',');
-            input.value = input.value.replace(/[^0-9,]/g, '');
-            if ((input.value.match(/,/g) || []).length > 1) {
-                input.value = input.value.slice(0, -1);
-            }
+            input.value = input.value.replace('.', ',').replace(/[^0-9,]/g, '');
+            if ((input.value.match(/,/g) || []).length > 1) input.value = input.value.slice(0, -1);
         }
     </script>
 
