@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Przelew v4 - Kalibracja</title>
+    <title>Przelew v5 - Tytuł zamiast Konta</title>
     <style>
         body {
             background-color: #333;
@@ -14,7 +14,7 @@
 
         .form-wrapper {
             position: relative;
-            width: 1000px; /* Stała szerokość - nasza baza */
+            width: 1000px;
         }
 
         .form-bg {
@@ -27,8 +27,10 @@
             position: absolute;
             background: transparent;
             border: none; 
-            /* border: 1px solid red;  <-- Odkomentuj, jeśli chcesz widzieć granice */
-            font-family: 'Courier New', Courier, monospace; /* Stała szerokość znaku */
+            /* ODKOMENTUJ PONIŻSZĄ LINIĘ, ABY ZOBACZYĆ GDZIE SĄ POLA (Czerwona ramka) */
+            /* border: 1px solid red; */
+            
+            font-family: 'Courier New', Courier, monospace; 
             font-weight: bold;
             color: #000;
             padding: 0;
@@ -37,37 +39,32 @@
             line-height: 1;
         }
 
-        /* --- KALIBRACJA V4 --- */
+        /* --- KALIBRACJA v5 --- */
 
-        /* 1. Nazwa Odbiorcy - Poprawione */
+        /* 1. Nazwa Odbiorcy */
         #input-nazwa {
-            top: 43px;          
+            top: 46px;          /* Obniżone o 3px względem poprzedniej wersji */
             left: 156px;        
             width: 810px;
             height: 30px;
             font-size: 24px;    
-            
-            /* BYŁO: 13.8px -> ZMNIEJSZAM DO: 13.2px */
-            /* Tekst uciekał w prawo, więc musimy go ścisnąć */
-            letter-spacing: 13.2px; 
-            
+            letter-spacing: 12.9px; /* Ściśnięte jeszcze bardziej (było 13.2px) */
             text-transform: uppercase;
         }
 
-        /* 2. Numer Rachunku - Poprawione */
-        #input-konto {
-            top: 134px;         /* Minimalna korekta w dół (z 132 na 134), żeby było idealnie w środku */
-            left: 155px;
-            width: 800px;
-            height: 35px;
+        /* 2. Tytułem (Nowe pole zamiast konta) */
+        /* UWAGA: To jest wyliczone na ok. 6 rząd kratek */
+        #input-tytul {
+            top: 270px;         /* Szacowana pozycja dla pola 'Tytułem' */
+            left: 156px;        /* Ten sam start co nazwa */
+            width: 810px;
+            height: 30px;
             font-size: 24px;
-            
-            /* BYŁO: 13.7px -> ZMNIEJSZAM DO: 13.2px */
-            /* Tu też tekst dryfował w prawo */
-            letter-spacing: 13.2px; 
+            letter-spacing: 12.9px; /* Taka sama siatka jak w nazwie */
+            text-transform: uppercase;
         }
 
-        /* 3. Kwota - BEZ ZMIAN (jest super) */
+        /* 3. Kwota (Bez zmian) */
         #input-kwota {
             top: 182px;         
             left: 585px;
@@ -87,31 +84,33 @@
         <img src="5b35db272c392_p.jpg" alt="Wzór przelewu" class="form-bg">
 
         <input type="text" id="input-nazwa" class="input-field" maxlength="27" 
-               placeholder="JAN KOWALSKI" oninput="validateName(this)">
+               placeholder="NAZWA ODBIORCY" oninput="validateName(this)">
         
-        <input type="text" id="input-konto" class="input-field" maxlength="26" 
-               placeholder="0000..." oninput="validateAccount(this)">
+        <input type="text" id="input-tytul" class="input-field" maxlength="27" 
+               placeholder="TYTUŁEM" oninput="validateTitle(this)">
         
         <input type="text" id="input-kwota" class="input-field" maxlength="12" 
                placeholder="0,00" oninput="validateAmount(this)">
     </div>
 
     <script>
-        /* LOGIKA WALIDACJI (JavaScript) */
+        /* LOGIKA WALIDACJI */
 
+        // 1. Nazwa: Tylko litery
         function validateName(input) {
-            // Tylko litery i spacje
             input.value = input.value.replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]/g, '');
             input.value = input.value.toUpperCase();
         }
 
-        function validateAccount(input) {
-            // Tylko cyfry
-            input.value = input.value.replace(/[^0-9]/g, '');
+        // 2. Tytuł: Litery, Cyfry, Myślniki, Ukośniki (np. FV/2024)
+        function validateTitle(input) {
+            // Pozwalamy na trochę więcej znaków niż w nazwie
+            input.value = input.value.replace(/[^a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\/\-\.]/g, '');
+            input.value = input.value.toUpperCase();
         }
 
+        // 3. Kwota: Cyfry i przecinek
         function validateAmount(input) {
-            // Zamiana kropki na przecinek + tylko cyfry
             input.value = input.value.replace('.', ',');
             input.value = input.value.replace(/[^0-9,]/g, '');
             if ((input.value.match(/,/g) || []).length > 1) {
