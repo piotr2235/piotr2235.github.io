@@ -2,76 +2,77 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Przelew v2 - Poprawiony</title>
+    <title>Przelew v3 - Logic & Fix</title>
     <style>
         body {
             background-color: #333;
             display: flex;
             justify-content: center;
             padding-top: 20px;
+            font-family: sans-serif;
         }
 
         .form-wrapper {
             position: relative;
-            width: 1000px; /* Sztywna szerokość bazy */
-            /* Wysokość dopasuje się do obrazka */
+            width: 1000px; /* Baza odniesienia */
         }
 
         .form-bg {
             width: 100%;
             display: block;
+            user-select: none;
         }
 
         .input-field {
             position: absolute;
-            background: transparent; /* Usuwamy tło, żeby nie zasłaniać kratek */
-            border: none; /* Usuwamy ramki docelowo */
+            background: transparent;
+            border: none; /* Brak ramki dla realizmu */
             
-            /* PONIŻEJ: Włącz to do testów, żeby widzieć gdzie są pola */
-            /* border: 1px solid rgba(255, 0, 0, 0.5); background: rgba(255, 255, 0, 0.2); */
+            /* Odkomentuj poniższe, aby widzieć granice pól przy kalibracji */
+            /* border: 1px solid rgba(255, 0, 0, 0.3); */
             
-            font-family: 'Courier New', Courier, monospace; /* Monospace jest kluczowy! */
+            font-family: 'Courier New', Courier, monospace; /* Musi być monospaced */
             font-weight: bold;
             color: #000;
             padding: 0;
             margin: 0;
             outline: none;
-            z-index: 10;
+            line-height: 1; /* Ważne dla wyrównania w pionie */
         }
 
-        /* --- KALIBRACJA PÓL (Wartości w PX dla szerokości 1000px) --- */
+        /* --- KALIBRACJA (Dostrojone na podstawie Twojego screenshota) --- */
 
         /* 1. Nazwa Odbiorcy */
         #input-nazwa {
-            top: 40px;         /* Przesunięcie od góry */
-            left: 148px;       /* Start pierwszej kratki */
-            width: 815px;
-            height: 35px;
-            font-size: 23px;   /* Dobrany rozmiar czcionki */
-            letter-spacing: 14.2px; /* Rozstrzelenie liter do kratek */
-            text-transform: uppercase;
+            top: 43px;          /* Minimalnie w dół, żeby było centralnie w pionie */
+            left: 156px;        /* Przesunięte w prawo - na screenie "A" wychodziło za linię */
+            width: 810px;
+            height: 30px;
+            font-size: 24px;    
+            letter-spacing: 13.8px; /* Zmniejszone minimalnie, żeby nie uciekało na końcu */
+            text-transform: uppercase; /* Automatycznie duże litery */
         }
 
         /* 2. Numer Rachunku */
         #input-konto {
-            top: 138px;
-            left: 148px;
+            top: 132px;         /* Podniesione do góry - na screenie litery leżały na linii */
+            left: 155px;
             width: 800px;
             height: 35px;
-            font-size: 23px;
-            letter-spacing: 14.3px; /* Minimalnie inne niż wyżej */
+            font-size: 24px;
+            letter-spacing: 13.7px; /* Osobny spacing dla numeru konta */
         }
 
-        /* 3. Kwota (To było najbardziej zepsute) */
+        /* 3. Kwota */
         #input-kwota {
-            top: 185px;        /* Podciągnięte mocno w górę */
-            left: 585px;       /* Przesunięte w prawo do pola kwoty */
+            top: 182px;         /* Minimalna korekta w górę */
+            left: 585px;
             width: 360px;
             height: 35px;
-            font-size: 23px;
-            text-align: right; /* Kwota do prawej */
+            font-size: 24px;
+            text-align: right;
             letter-spacing: 14px;
-            padding-right: 10px;
+            padding-right: 15px;
         }
 
     </style>
@@ -81,10 +82,49 @@
     <div class="form-wrapper">
         <img src="5b35db272c392_p.jpg" alt="Wzór przelewu" class="form-bg">
 
-        <input type="text" id="input-nazwa" class="input-field" value="JAN KOWALSKI">
-        <input type="text" id="input-konto" class="input-field" value="12345678901234567890123456">
-        <input type="text" id="input-kwota" class="input-field" value="1250,00">
+        <input type="text" id="input-nazwa" class="input-field" maxlength="27" 
+               placeholder="JAN KOWALSKI" oninput="validateName(this)">
+        
+        <input type="text" id="input-konto" class="input-field" maxlength="26" 
+               placeholder="0000..." oninput="validateAccount(this)">
+        
+        <input type="text" id="input-kwota" class="input-field" maxlength="12" 
+               placeholder="0,00" oninput="validateAmount(this)">
     </div>
+
+    <script>
+        /**
+         * Logika walidacji (JavaScript)
+         * Jako student informatyki na pewno kojarzysz Regex (Wyrażenia regularne).
+         */
+
+        // 1. Tylko litery (polskie znaki też) i spacje
+        function validateName(input) {
+            // Usuwa wszystko co NIE jest literą (a-z) lub polskim znakiem lub spacją
+            input.value = input.value.replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]/g, '');
+            input.value = input.value.toUpperCase(); // Wymuś duże litery
+        }
+
+        // 2. Tylko cyfry (Numer konta)
+        function validateAccount(input) {
+            // Usuwa wszystko co nie jest cyfrą 0-9
+            input.value = input.value.replace(/[^0-9]/g, '');
+        }
+
+        // 3. Kwota (Cyfry i przecinek/kropka)
+        function validateAmount(input) {
+            // Zamień kropkę na przecinek (standard polski)
+            input.value = input.value.replace('.', ',');
+            // Pozwól tylko na cyfry i przecinek
+            input.value = input.value.replace(/[^0-9,]/g, '');
+            
+            // Zabezpieczenie przed podwójnym przecinkiem (prosta logika)
+            if ((input.value.match(/,/g) || []).length > 1) {
+                // Jeśli jest więcej niż jeden przecinek, usuń ostatni znak
+                input.value = input.value.slice(0, -1);
+            }
+        }
+    </script>
 
 </body>
 </html>
