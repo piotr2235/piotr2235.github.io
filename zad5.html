@@ -3,138 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formularz Przelewu</title>
+    <title>Wzór Przelewu</title>
     <style>
-        /* Podstawowe style dla body */
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-
-        /* Główny kontener na formularz */
-        .form-container {
-            position: relative; /* Kluczowe dla pozycjonowania pól */
-            width: 100%;
-            max-width: 1000px; /* Maksymalna szerokość dla czytelności */
-            margin: auto;
-            border: 1px solid #ccc;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        /* Obraz tła formularza */
-        .background-image {
-            width: 100%;
-            height: auto;
-            display: block; /* Usuwa zbędne miejsce pod obrazkiem */
-        }
-
-        /* Kontener na wszystkie pola input, nałożony na obraz */
-        .fields-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
+        body, html {
+            margin: 0;
+            padding: 0;
             height: 100%;
+            width: 100%;
+            overflow: hidden; /* Opcjonalnie: ukrywa paski przewijania, jeśli chcesz statyczny widok */
         }
 
-        /* Ogólny styl dla wszystkich pól input */
-        .fields-overlay input[type="text"] {
+        .background-container {
+            /* Używamy dokładnej nazwy Twojego pliku */
+            background-image: url('5b35db272c392_p.jpg');
+            
+            /* Ustawienie: cover wypełni cały ekran (może uciąć boki), 
+               contain pokaże cały druk (mogą być puste paski po bokach).
+               Przy formularzach 'contain' jest bezpieczniejsze. */
+            background-size: contain; 
+            
+            background-position: center;
+            background-repeat: no-repeat;
+            
+            /* Kolor tła pod spodem (dla estetyki, gdy zdjęcie nie wypełnia ekranu) */
+            background-color: #fceaea; 
+            
+            width: 100%;
+            height: 100vh; /* 100% wysokości okna przeglądarki */
+        }
+        
+        /* Opcjonalny styl dla treści na wierzchu */
+        .overlay-content {
             position: absolute;
-            background: transparent; /* Przezroczyste tło */
-/* ... existing code ... -->
-             * aby skalowały się wraz z obrazkiem.
-             */
-            font-size: 1.5vw;  /* ZMNIEJSZONO: Mniejsza czcionka łatwiej mieści się w kratce */
-            /* Poniższe wartości letter-spacing zostały precyzyjnie obliczone */
-            letter-spacing: 1.8vw; /* ZWIĘKSZONO: Domyślne dla pól z 27 kratkami */
-            
-            padding-left: 0.8%; /* ZWIĘKSZONO: Lepsze centrowanie pierwszej litery */
-            box-sizing: border-box;
-            color: #000;
-/* ... existing code ... -->
-        @media (max-width: 600px) {
-            body {
-                padding: 5px; /* Mniejszy padding na mobilkach */
-            }
-            /* Ogólna zasada dla mobilnych */
-            .fields-overlay input[type="text"] {
-                font-size: 2.4vw;
-                letter-spacing: 2.8vw; /* Zaktualizowano proporcjonalnie */
-                padding-left: 1.2%; /* Zaktualizowano proporcjonalnie */
-            }
-            
-            /* Wyjątki dla pól specjalnych na mobilnych */
-            #nr-rachunku-odbiorcy {
-                font-size: 2.4vw;
-                letter-spacing: 1.2vw; /* Zaktualizowano proporcjonalnie */
-                padding-left: 0.3%;
-            }
-            #kwota {
-                font-size: 2.4vw;
-                letter-spacing: 1.2vw; /* Zaktualizowano proporcjonalnie */
-            }
-            #tytulem-1, #tytulem-2, #tytulem-3 {
-                font-size: 2.0vw;
-                letter-spacing: normal; /* Tytułem bez zmian */
-                padding-left: 0.5%;
-            }
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 15px;
+            border: 1px solid #ccc;
+            font-family: sans-serif;
         }
+    </style>
+</head>
+<body>
 
-        /* * Pozycjonowanie absolutne każdego pola w procentach,
-/* ... existing code ... -->
-        #nr-rachunku-odbiorcy {
-            top: 21%;
-            left: 24%;
-            width: 44.5%; 
-            height: 3.5%;
-            /* Specjalny letter-spacing dla numeru konta */
-            letter-spacing: 0.75vw; /* ZWIĘKSZONO: Lepsze dopasowanie cyfr w grupach */
-            padding-left: 0.3%; /* DODANO: Lepsze centrowanie pierwszej cyfry */
-        }
-        
-        #kwota {
-            top: 21%;
-            left: 71.5%;
-            width: 19%;
-            height: 3.5%;
-            letter-spacing: 0.8vw; /* ZWIĘKSZONO: Lepsze dopasowanie */
-            text-align: right; /* Kwota zwykle wyrównana do prawej */
-            padding-right: 1.5%;
-/* ... existing code ... -->
-        #tytulem-1 {
-            top: 53.5%;
-            left: 8.5%;
-/* ... existing code ... -->
-            height: 3.5%;
-            letter-spacing: normal; /* Normalny 'letter-spacing' dla tytułu (BEZ ZMIAN) */
-            font-size: 1.2vw; /* Mniejszy font dla tytułu (BEZ ZMIAN) */
-            padding-left: 0.5%; /* Przywrócenie domyślnego paddingu */
-        }
-        
-        #tytulem-2 {
-/* ... existing code ... -->
-            left: 8.5%;
-            width: 82%;
-            height: 3.5%;
-            letter-spacing: normal;
-            font-size: 1.2vw;
-            padding-left: 0.5%;
-        }
-        
-        #tytulem-3 {
-/* ... existing code ... -->
-            left: 8.5%;
-            width: 82%;
-            height: 3.5%;
-            letter-spacing: normal;
-            font-size: 1.2vw;
-            padding-left: 0.5%;
-        }
+    <div class="background-container">
+        </div>
 
-        /* Dodatkowy styl dla 'focus' (gdy klikniemy w pole) */
-/* ... existing code ... -->
+</body>
+</html>
