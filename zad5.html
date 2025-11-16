@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Przelew v7 - Zleceniodawca</title>
+    <title>Przelew v8 - Obniżone pola</title>
     <style>
         body {
             background-color: #333;
@@ -37,38 +37,33 @@
             font-size: 24px; 
         }
 
-        /* --- KALIBRACJA v7 (Modyfikacja) --- */
-
-        /* 1. Nazwa Odbiorcy (USUNIĘTE) */
+        /* --- KALIBRACJA v8 --- */
         
-        
-        /* 2. Nazwa ZLECENIODAWCY (NOWE POLE) */
-        /* Celuje w 5. rząd kratek. STYL (spacing) skopiowany z 'Tytułem' */
+        /* 1. Nazwa ZLECENIODAWCY */
         #input-zleceniodawca {
-            top: 272px;        /* Pozycja dla 5. rzędu kratek */
+            top: 278px;        /* OBNIŻONE o 6px (było 272px) */
             left: 155px;       
             width: 815px;
             height: 35px;
             text-align: left;
             padding-left: 5px;
-            letter-spacing: 13.3px; /* Kopia z v7 'tytułem' */
+            letter-spacing: 13.3px; 
             text-transform: uppercase;
         }
 
-
-        /* 3. Tytułem (Zostaje z v7) */
+        /* 2. Tytułem */
         #input-tytul {
-            top: 385px;        
+            top: 391px;        /* OBNIŻONE o 6px (było 385px) */
             left: 155px;       
             width: 815px;
             height: 35px;
             text-align: left;
             padding-left: 5px;
-            letter-spacing: 13.3px; /* Wzorzec z v7 */
+            letter-spacing: 13.3px; 
             text-transform: uppercase;
         }
 
-        /* 4. Kwota (Zostaje z v7 - dobra) */
+        /* 3. Kwota (Bez zmian - jest dobra) */
         #input-kwota {
             top: 182px;         
             left: 585px;
@@ -76,7 +71,7 @@
             height: 35px;
             text-align: right;
             padding-right: 15px;
-            letter-spacing: 14px; /* Styl dla kwoty */
+            letter-spacing: 14px; 
         }
 
     </style>
@@ -97,17 +92,14 @@
     </div>
 
     <script>
-        // Walidacja dla Zleceniodawcy (tylko litery)
         function validatePayerName(input) {
             input.value = input.value.replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]/g, '').toUpperCase();
         }
 
-        // Walidacja dla Tytułem (litery, cyfry, myślniki)
         function validateTitle(input) {
             input.value = input.value.replace(/[^a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\/\-\.]/g, '').toUpperCase();
         }
 
-        // Walidacja dla Kwoty
         function validateAmount(input) {
             input.value = input.value.replace('.', ',').replace(/[^0-9,]/g, '');
             if ((input.value.match(/,/g) || []).length > 1) input.value = input.value.slice(0, -1);
