@@ -80,7 +80,7 @@
         <img src="5b35db272c392_p.jpg" alt="Wzór przelewu" class="form-bg">
 
         <input type="text" id="input-zleceniodawca" class="input-field" maxlength="27" 
-               placeholder="NAZWA ZLECENIODAWCY" oninput="validatePayerName(this)">
+               placeholder="NAZWA" oninput="validatePayerName(this)">
         
         <input type="text" id="input-tytul" class="input-field" maxlength="27" 
                placeholder="TYTUŁEM" oninput="validateTitle(this)">
@@ -105,8 +105,6 @@
             if ((input.value.match(/,/g) || []).length > 1) input.value = input.value.slice(0, -1);
         }
 
-        // --- ZMODYFIKOWANA FUNKCJA ---
-        function validateAmount(input) {
         
     </script>
 
