@@ -2,114 +2,120 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interaktywny Druk Przelewu</title>
+    <title>Przelew v7 - Final Adjust</title>
     <style>
         body {
-            background-color: #f0f0f0;
+            background-color: #333;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 20px;
-            font-family: Arial, sans-serif;
-            margin: 0; /* Usunięcie domyślnych marginesów */
+            padding-top: 20px;
+            font-family: sans-serif;
         }
 
-        .przelew-kontener {
+        .form-wrapper {
             position: relative;
-            width: 800px; /* Szerokość oryginalnego obrazka */
-            height: 379px; /* Wysokość oryginalnego obrazka */
-            background-image: url('5b35db272c392_p.jpg'); /* Upewnij się, że nazwa pliku się zgadza */
-            background-size: cover;
-            border: 1px solid #ccc; /* Delikatna ramka wokół kontenera */
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-            overflow: hidden; /* Upewnij się, że nic nie wychodzi poza kontener */
+            width: 1000px;
         }
 
-        .pole {
+        .form-bg {
+            width: 100%;
+            display: block;
+            user-select: none;
+        }
+
+        .input-field {
             position: absolute;
-            box-sizing: border-box;
-            overflow: hidden; 
-            white-space: nowrap;
-            /* Debug styles - usuń, gdy będziesz zadowolony z pozycjonowania */
-            /* background: rgba(0, 0, 255, 0.1); */ /* Lekkie niebieskie tło */
-            /* border: 1px dotted rgba(255, 0, 0, 0.5); */ /* Czerwona przerywana ramka */
-        }
-
-        .pole-tekstowe {
-            font-size: 11px; /* Zmniejszony rozmiar czcionki */
-            font-family: Arial, sans-serif;
-            padding-left: 1px;
-            color: #333; /* Ciemniejszy kolor tekstu */
-        }
-
-        .pole-kratki {
-            font-family: 'Courier New', Courier, monospace;
+            background: transparent;
+            border: none; 
+            font-family: 'Courier New', Courier, monospace; 
             font-weight: bold;
-            font-size: 11px; /* Zmniejszony rozmiar czcionki dla kratek */
-            text-transform: uppercase;
             color: #000;
-            text-align: center; /* Wyśrodkowanie tekstu w poziomie */
+            padding: 0;
+            margin: 0;
+            outline: none;
+            line-height: 1;
+            font-size: 24px; /* Rozmiar czcionki stały */
+        }
+
+        /* --- DEDYKOWANE KALIBRACJE --- */
+
+        /* 1. Nazwa Odbiorcy */
+        /* Problem: tekst uciekał w prawo -> Zmniejszamy spacing */
+        #input-nazwa {
+            top: 45px;         
+            left: 155px;       
+            width: 815px;
+            height: 35px;
+            text-align: left;
+            padding-left: 5px;
             
-            /* KLUCZOWA WŁAŚCIWOŚĆ DO REGULACJI! */
-            /* Zmniejszony letter-spacing - testuj z wartościami 10.0px, 9.8px, 10.2px */
-            letter-spacing: 9.8px; 
-            /* Upewnij się, że width jest wielokrotnością szerokości kratki + odstępu */
+            /* KOREKTA: Zmniejszone z 14px na 13.3px */
+            letter-spacing: 13.3px; 
+            
+            text-transform: uppercase;
         }
 
-        /* --- Pola tekstowe --- */
-        #nazwa-odbiorcy-1 { top: 40px; left: 161px; width: 620px; height: 16px; }
-        #nazwa-odbiorcy-2 { top: 65px; left: 161px; width: 620px; height: 16px; }
-        
-        #nazwa-zleceniodawcy-1 { top: 178px; left: 161px; width: 620px; height: 16px; }
-        #nazwa-zleceniodawcy-2 { top: 203px; left: 161px; width: 620px; height: 16px; }
-
-        #tytulem-1 { top: 255px; left: 161px; width: 620px; height: 16px; }
-        #tytulem-2 { top: 280px; left: 161px; width: 620px; height: 16px; }
-        
-        /* --- Pola w kratkach --- */
-        /* Dodałem input type="text" - to może być wygodniejsze do wpisywania */
-        
-        #nr-rachunku { 
-            top: 91px; left: 161px; width: 620px; height: 23px;
-            letter-spacing: 9.8px; /* Reguluj to dla idealnego dopasowania do kratek */
-            font-size: 14px; /* nieznacznie większa czcionka do numeru rachunku */
-        }
-        
-        #waluta { 
-            top: 119px; left: 452px; width: 72px; height: 23px; 
-            letter-spacing: 9.8px; /* Tutaj też reguluj */
-            font-size: 14px;
-            text-align: center; /* Wyśrodkuj "PLN" */
-            line-height: 23px; /* Wyśrodkuj tekst w pionie */
+        /* 2. Tytułem */
+        /* Problem: był za nisko i za szeroko */
+        #input-tytul {
+            top: 385px;        /* PODNIESIONE o 20px (było 405px) */
+            left: 155px;       
+            width: 815px;
+            height: 35px;
+            text-align: left;
+            padding-left: 5px;
+            
+            /* KOREKTA: Też zmniejszamy, bo to ta sama siatka co wyżej */
+            letter-spacing: 13.3px; 
+            
+            text-transform: uppercase;
         }
 
-        #kwota { 
-            top: 119px; left: 591px; width: 190px; height: 23px; 
-            letter-spacing: 9.8px; /* Tutaj też reguluj */
-            font-size: 14px;
+        /* 3. Kwota */
+        /* To było dobre, więc NIE ZMIENIAMY */
+        #input-kwota {
+            top: 182px;         
+            left: 585px;
+            width: 360px;
+            height: 35px;
+            text-align: right;
+            padding-right: 15px;
+            
+            /* Zostawiamy 14px, bo tutaj pasowało */
+            letter-spacing: 14px; 
         }
 
     </style>
 </head>
 <body>
 
-    <div class="przelew-kontener">
+    <div class="form-wrapper">
+        <img src="5b35db272c392_p.jpg" alt="Wzór przelewu" class="form-bg">
+
+        <input type="text" id="input-nazwa" class="input-field" maxlength="27" 
+               placeholder="NAZWA ODBIORCY" oninput="validateName(this)">
         
-        <div id="nazwa-odbiorcy-1" class="pole pole-tekstowe" contenteditable="true"></div>
-        <div id="nazwa-odbiorcy-2" class="pole pole-tekstowe" contenteditable="true"></div>
-
-        <div id="nazwa-zleceniodawcy-1" class="pole pole-tekstowe" contenteditable="true"></div>
-        <div id="nazwa-zleceniodawcy-2" class="pole pole-tekstowe" contenteditable="true"></div>
-
-        <div id="tytulem-1" class="pole pole-tekstowe" contenteditable="true"></div>
-        <div id="tytulem-2" class="pole pole-tekstowe" contenteditable="true"></div>
-
-        <div id="nr-rachunku" class="pole pole-kratki" contenteditable="true"></div>
-        <div id="waluta" class="pole pole-kratki" contenteditable="true">PLN</div>
-        <div id="kwota" class="pole pole-kratki" contenteditable="true"></div>
-
+        <input type="text" id="input-tytul" class="input-field" maxlength="27" 
+               placeholder="TYTUŁEM" oninput="validateTitle(this)">
+        
+        <input type="text" id="input-kwota" class="input-field" maxlength="12" 
+               placeholder="0,00" oninput="validateAmount(this)">
     </div>
+
+    <script>
+        function validateName(input) {
+            input.value = input.value.replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]/g, '').toUpperCase();
+        }
+
+        function validateTitle(input) {
+            input.value = input.value.replace(/[^a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\/\-\.]/g, '').toUpperCase();
+        }
+
+        function validateAmount(input) {
+            input.value = input.value.replace('.', ',').replace(/[^0-9,]/g, '');
+            if ((input.value.match(/,/g) || []).length > 1) input.value = input.value.slice(0, -1);
+        }
+    </script>
 
 </body>
 </html>
