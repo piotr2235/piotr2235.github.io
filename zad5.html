@@ -39,7 +39,7 @@
 
    
         #input-zleceniodawca {
-            top: 285px;        /* OBNIŻONE o 6px (było 272px) */
+            top: 285px;        
             left: 155px;       
             width: 815px;
             height: 35px;
@@ -50,7 +50,7 @@
         }
 
         #input-tytul {
-            top: 391px;       
+            top: 385px;       
             left: 155px;       
             width: 815px;
             height: 35px;
@@ -70,15 +70,7 @@
             padding-right: 15px;
             letter-spacing: 14px; 
         }
-   #input-oplata {
-            top: 615px;         /* Pozycja dla pola "Opłata" (na samym dole) */
-            left: 540px;        /* Przesunięte w lewo względem kwoty */
-            width: 170px;       /* Węższe pole */
-            height: 35px;
-            text-align: right;
-            padding-right: 15px;
-            letter-spacing: 14px; /* Ten sam styl co kwota */
-        }
+
 
     </style>
 </head>
@@ -96,7 +88,7 @@
         <input type="text" id="input-kwota" class="input-field" maxlength="12" 
                placeholder="0,00" oninput="validateAmount(this)">
 
-        <input type="text" id="input-oplata" class="input-field" readonly>
+     
     </div>
 
     <script>
@@ -115,18 +107,7 @@
 
         // --- ZMODYFIKOWANA FUNKCJA ---
         function validateAmount(input) {
-            // 1. Walidacja (bez zmian)
-            input.value = input.value.replace('.', ',').replace(/[^0-9,]/g, '');
-            if ((input.value.match(/,/g) || []).length > 1) input.value = input.value.slice(0, -1);
-            
-            // 2. Logika lustra (NOWA CZĘŚĆ)
-            // Znajdź pole opłaty
-            const oplataField = document.getElementById('input-oplata');
-            if (oplataField) {
-                // Ustaw jego wartość na taką samą jak w polu kwoty
-                oplataField.value = input.value;
-            }
-        }
+        
     </script>
 
 </body>
