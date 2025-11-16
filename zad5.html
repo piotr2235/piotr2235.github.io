@@ -2,66 +2,135 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Przelew v8 - Rozciągnięcie</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktywny Druk Przelewu</title>
     <style>
         body {
-            background-color: #333;
+            background-color: #f0f0f0;
             display: flex;
             justify-content: center;
-            padding-top: 20px;
-            font-family: sans-serif;
+            align-items: center;
+            padding: 20px;
+            font-family: Arial, sans-serif;
         }
 
-        .form-wrapper {
+        /* * KROK 1: Kontener na obrazek przelewu
+         * Ustawiamy pozycję na 'relative', aby pola wewnątrz 
+         * pozycjonowały się względem tego kontenera.
+         * Wymiary (800x379) to oryginalne wymiary Twojego obrazka.
+        */
+        .przelew-kontener {
             position: relative;
-            width: 1000px;
+            width: 800px;
+            height: 379px;
+            background-image: url('5b35db272c392_p.jpg'); /* Nazwa Twojego pliku */
+            background-size: cover;
+            border: 1px solid #333;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
 
-        .form-bg {
-            width: 100%;
-            display: block;
-            user-select: none;
-        }
-
-        .input-field {
+        /* * KROK 2: Wspólny styl dla wszystkich pól formularza
+         * 'position: absolute' to klucz do umieszczenia pól w dowolnym miejscu.
+         * Tło i ramka (tzw. "debug styles") pomagają Ci je precyzyjnie ustawić.
+         * Możesz je usunąć, gdy skończysz.
+        */
+        .pole {
             position: absolute;
-            background: transparent;
-            border: none; 
-            font-family: 'Courier New', Courier, monospace; 
+            background: rgba(255, 255, 0, 0.2); /* Półprzezroczyste tło do debugowania */
+            border: 1px dotted red; /* Ramka do debugowania */
+            
+            box-sizing: border-box;
+            overflow: hidden; /* Ukrywa tekst, który się nie mieści */
+            white-space: nowrap; /* Zapobiega zawijaniu tekstu */
+        }
+
+        /* * KROK 3: Style dla konkretnych typów pól
+        */
+        
+        /* Styl dla zwykłych pól (jak nazwa, tytuł) */
+        .pole-tekstowe {
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            padding-left: 2px;
+        }
+
+        /* * KLUCZOWY STYL: Pola w kratkach (rachunek, kwota)
+         * Używamy czcionki o stałej szerokości (monospace).
+         * 'letter-spacing' to "magia", która rozsuwa litery, by pasowały do kratek.
+         * 'text-transform: uppercase' zamienia wszystko na duże litery.
+        */
+        .pole-kratki {
+            font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
-            color: #000;
-            padding: 0;
-            margin: 0;
-            outline: none;
-            line-height: 1;
-            font-size: 24px; 
-        }
-
-        /* --- KOREKTA v8 --- */
-
-        /* 1. Nazwa Odbiorcy */
-        #input-nazwa {
-            top: 49px;          /* Obniżone (było 45) - żeby nie dotykało góry */
-            left: 158px;        /* Lekko w prawo (było 155) */
-            width: 815px;
-            height: 35px;
-            text-align: left;
-            padding-left: 0;    /* Reset paddingu */
-            
-            /* ZWIĘKSZAMY SPACING - tekst musi się rozciągnąć */
-            letter-spacing: 14.5px; 
-            
+            font-size: 18px; /* Musisz dopasować rozmiar do kratek na obrazku */
             text-transform: uppercase;
+            
+            /* To jest najważniejsza właściwość do regulacji! */
+            letter-spacing: 11.5px; /* Dopasuj, aż litery będą idealnie w kratkach */
+
+            /* Usuwamy tło i ramkę debugowania dla pól z kratkami, by lepiej widzieć */
+            background: transparent;
+            border: none;
+            color: #000;
         }
 
-        /* 2. Tytułem */
-        #input-tytul {
-            top: 390px;        /* Obniżone (było 385) - żeby weszło w środek */
-            left: 158px;       
-            width: 815px;
-            height: 35px;
-            text-align: left;
-            padding-left: 0;
-            
-            /* ZWIĘKSZAMY SPACING - tak samo jak wyżej */
-            letter
+        /*
+         * KROK 4: USTAWIENIE WSPÓŁRZĘDNYCH (TOP, LEFT, WIDTH, HEIGHT)
+         * To jest Twoje główne zadanie. Podałem przybliżone wartości.
+         * Musisz je precyzyjnie dopasować "na oko".
+        */
+
+        /* --- Pola tekstowe --- */
+        #nazwa-odbiorcy-1 { top: 41px; left: 162px; width: 620px; height: 18px; }
+        #nazwa-odbiorcy-2 { top: 66px; left: 162px; width: 620px; height: 18px; }
+        
+        #nazwa-zleceniodawcy-1 { top: 179px; left: 162px; width: 620px; height: 18px; }
+        #nazwa-zleceniodawcy-2 { top: 204px; left: 162px; width: 620px; height: 18px; }
+
+        #tytulem-1 { top: 256px; left: 162px; width: 620px; height: 18px; }
+        #tytulem-2 { top: 281px; left: 162px; width: 620px; height: 18px; }
+        
+        /* --- Pola w kratkach (wymagają precyzji!) --- */
+        
+        /* Zauważ inny letter-spacing dla rachunku i kwoty */
+        #nr-rachunku { 
+            top: 92px; left: 162px; width: 620px; height: 25px;
+            letter-spacing: 21.6px; /* Inne kratki, inny odstęp */
+            font-size: 16px;
+        }
+        
+        #waluta { 
+            top: 120px; left: 454px; width: 70px; height: 25px; 
+            letter-spacing: 21.6px;
+            font-size: 16px;
+        }
+
+        #kwota { 
+            top: 120px; left: 593px; width: 190px; height: 25px; 
+            letter-spacing: 21.6px;
+            font-size: 16px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="przelew-kontener">
+        
+        <div id="nazwa-odbiorcy-1" class="pole pole-tekstowe" contenteditable="true"></div>
+        <div id="nazwa-odbiorcy-2" class="pole pole-tekstowe" contenteditable="true"></div>
+
+        <div id="nazwa-zleceniodawcy-1" class="pole pole-tekstowe" contenteditable="true"></div>
+        <div id="nazwa-zleceniodawcy-2" class="pole pole-tekstowe" contenteditable="true"></div>
+
+        <div id="tytulem-1" class="pole pole-tekstowe" contenteditable="true"></div>
+        <div id="tytulem-2" class="pole pole-tekstowe" contenteditable="true"></div>
+
+        <div id="nr-rachunku" class="pole pole-kratki" contenteditable="true"></div>
+        <div id="waluta" class="pole pole-kratki" contenteditable="true">PLN</div>
+        <div id="kwota" class="pole pole-kratki" contenteditable="true"></div>
+
+    </div>
+
+</body>
+</html>
