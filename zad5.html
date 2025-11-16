@@ -12,103 +12,82 @@
             align-items: center;
             padding: 20px;
             font-family: Arial, sans-serif;
+            margin: 0; /* Usunięcie domyślnych marginesów */
         }
 
-        /* * KROK 1: Kontener na obrazek przelewu
-         * Ustawiamy pozycję na 'relative', aby pola wewnątrz 
-         * pozycjonowały się względem tego kontenera.
-         * Wymiary (800x379) to oryginalne wymiary Twojego obrazka.
-        */
         .przelew-kontener {
             position: relative;
-            width: 800px;
-            height: 379px;
-            background-image: url('5b35db272c392_p.jpg'); /* Nazwa Twojego pliku */
+            width: 800px; /* Szerokość oryginalnego obrazka */
+            height: 379px; /* Wysokość oryginalnego obrazka */
+            background-image: url('5b35db272c392_p.jpg'); /* Upewnij się, że nazwa pliku się zgadza */
             background-size: cover;
-            border: 1px solid #333;
+            border: 1px solid #ccc; /* Delikatna ramka wokół kontenera */
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            overflow: hidden; /* Upewnij się, że nic nie wychodzi poza kontener */
         }
 
-        /* * KROK 2: Wspólny styl dla wszystkich pól formularza
-         * 'position: absolute' to klucz do umieszczenia pól w dowolnym miejscu.
-         * Tło i ramka (tzw. "debug styles") pomagają Ci je precyzyjnie ustawić.
-         * Możesz je usunąć, gdy skończysz.
-        */
         .pole {
             position: absolute;
-            background: rgba(255, 255, 0, 0.2); /* Półprzezroczyste tło do debugowania */
-            border: 1px dotted red; /* Ramka do debugowania */
-            
             box-sizing: border-box;
-            overflow: hidden; /* Ukrywa tekst, który się nie mieści */
-            white-space: nowrap; /* Zapobiega zawijaniu tekstu */
+            overflow: hidden; 
+            white-space: nowrap;
+            /* Debug styles - usuń, gdy będziesz zadowolony z pozycjonowania */
+            /* background: rgba(0, 0, 255, 0.1); */ /* Lekkie niebieskie tło */
+            /* border: 1px dotted rgba(255, 0, 0, 0.5); */ /* Czerwona przerywana ramka */
         }
 
-        /* * KROK 3: Style dla konkretnych typów pól
-        */
-        
-        /* Styl dla zwykłych pól (jak nazwa, tytuł) */
         .pole-tekstowe {
-            font-size: 14px;
+            font-size: 11px; /* Zmniejszony rozmiar czcionki */
             font-family: Arial, sans-serif;
-            padding-left: 2px;
+            padding-left: 1px;
+            color: #333; /* Ciemniejszy kolor tekstu */
         }
 
-        /* * KLUCZOWY STYL: Pola w kratkach (rachunek, kwota)
-         * Używamy czcionki o stałej szerokości (monospace).
-         * 'letter-spacing' to "magia", która rozsuwa litery, by pasowały do kratek.
-         * 'text-transform: uppercase' zamienia wszystko na duże litery.
-        */
         .pole-kratki {
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
-            font-size: 18px; /* Musisz dopasować rozmiar do kratek na obrazku */
+            font-size: 11px; /* Zmniejszony rozmiar czcionki dla kratek */
             text-transform: uppercase;
-            
-            /* To jest najważniejsza właściwość do regulacji! */
-            letter-spacing: 11.5px; /* Dopasuj, aż litery będą idealnie w kratkach */
-
-            /* Usuwamy tło i ramkę debugowania dla pól z kratkami, by lepiej widzieć */
-            background: transparent;
-            border: none;
             color: #000;
+            text-align: center; /* Wyśrodkowanie tekstu w poziomie */
+            
+            /* KLUCZOWA WŁAŚCIWOŚĆ DO REGULACJI! */
+            /* Zmniejszony letter-spacing - testuj z wartościami 10.0px, 9.8px, 10.2px */
+            letter-spacing: 9.8px; 
+            /* Upewnij się, że width jest wielokrotnością szerokości kratki + odstępu */
         }
 
-        /*
-         * KROK 4: USTAWIENIE WSPÓŁRZĘDNYCH (TOP, LEFT, WIDTH, HEIGHT)
-         * To jest Twoje główne zadanie. Podałem przybliżone wartości.
-         * Musisz je precyzyjnie dopasować "na oko".
-        */
-
         /* --- Pola tekstowe --- */
-        #nazwa-odbiorcy-1 { top: 41px; left: 162px; width: 620px; height: 18px; }
-        #nazwa-odbiorcy-2 { top: 66px; left: 162px; width: 620px; height: 18px; }
+        #nazwa-odbiorcy-1 { top: 40px; left: 161px; width: 620px; height: 16px; }
+        #nazwa-odbiorcy-2 { top: 65px; left: 161px; width: 620px; height: 16px; }
         
-        #nazwa-zleceniodawcy-1 { top: 179px; left: 162px; width: 620px; height: 18px; }
-        #nazwa-zleceniodawcy-2 { top: 204px; left: 162px; width: 620px; height: 18px; }
+        #nazwa-zleceniodawcy-1 { top: 178px; left: 161px; width: 620px; height: 16px; }
+        #nazwa-zleceniodawcy-2 { top: 203px; left: 161px; width: 620px; height: 16px; }
 
-        #tytulem-1 { top: 256px; left: 162px; width: 620px; height: 18px; }
-        #tytulem-2 { top: 281px; left: 162px; width: 620px; height: 18px; }
+        #tytulem-1 { top: 255px; left: 161px; width: 620px; height: 16px; }
+        #tytulem-2 { top: 280px; left: 161px; width: 620px; height: 16px; }
         
-        /* --- Pola w kratkach (wymagają precyzji!) --- */
+        /* --- Pola w kratkach --- */
+        /* Dodałem input type="text" - to może być wygodniejsze do wpisywania */
         
-        /* Zauważ inny letter-spacing dla rachunku i kwoty */
         #nr-rachunku { 
-            top: 92px; left: 162px; width: 620px; height: 25px;
-            letter-spacing: 21.6px; /* Inne kratki, inny odstęp */
-            font-size: 16px;
+            top: 91px; left: 161px; width: 620px; height: 23px;
+            letter-spacing: 9.8px; /* Reguluj to dla idealnego dopasowania do kratek */
+            font-size: 14px; /* nieznacznie większa czcionka do numeru rachunku */
         }
         
         #waluta { 
-            top: 120px; left: 454px; width: 70px; height: 25px; 
-            letter-spacing: 21.6px;
-            font-size: 16px;
+            top: 119px; left: 452px; width: 72px; height: 23px; 
+            letter-spacing: 9.8px; /* Tutaj też reguluj */
+            font-size: 14px;
+            text-align: center; /* Wyśrodkuj "PLN" */
+            line-height: 23px; /* Wyśrodkuj tekst w pionie */
         }
 
         #kwota { 
-            top: 120px; left: 593px; width: 190px; height: 25px; 
-            letter-spacing: 21.6px;
-            font-size: 16px;
+            top: 119px; left: 591px; width: 190px; height: 23px; 
+            letter-spacing: 9.8px; /* Tutaj też reguluj */
+            font-size: 14px;
         }
 
     </style>
