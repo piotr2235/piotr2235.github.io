@@ -2,12 +2,12 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Przelew Pocztowy z Generatorem XML</title>
+    <title>Przelew Pocztowy - Wersja Uproszczona</title>
     <style>
         body {
             background-color: #333;
             display: flex;
-            flex-direction: column; /* Zmienione na kolumnę, aby generator był na dole */
+            flex-direction: column; /* Utrzymujemy układ kolumnowy */
             align-items: center; /* Wyśrodkowanie */
             padding-top: 20px;
             font-family: sans-serif;
@@ -36,42 +36,10 @@
             outline: none;
             line-height: 1;
             font-size: 24px;
-            text-transform: uppercase; /* Przeniesione z walidacji do CSS */
+            text-transform: uppercase;
         }
 
-        /* --- NOWE POLA DODANE DLA GENERATORA --- */
-        
-        #input-odbiorca {
-            top: 70px;
-            left: 155px;
-            width: 815px;
-            height: 35px;
-            text-align: left;
-            padding-left: 5px;
-            letter-spacing: 14.2px;
-        }
-
-        #input-nr-odbiorcy {
-            top: 130px;
-            left: 155px;
-            width: 730px; /* 26 kratek */
-            height: 35px;
-            text-align: left;
-            padding-left: 5px;
-            letter-spacing: 14.2px;
-        }
-        
-        #input-nr-zleceniodawcy {
-            top: 235px;
-            left: 155px;
-            width: 730px; /* 26 kratek */
-            height: 35px;
-            text-align: left;
-            padding-left: 5px;
-            letter-spacing: 14.2px;
-        }
-
-        /* --- TWOJE ISTNIEJĄCE POLA (BEZ ZMIAN) --- */
+        /* --- TWOJE ORYGINALNE POLA (BEZ ZMIAN) --- */
 
         #input-zleceniodawca {
             top: 285px;
@@ -103,7 +71,7 @@
             letter-spacing: 14px;
         }
 
-        /* --- NOWE STYLE DLA GENERATORA --- */
+        /* --- STYLE DLA GENERATORA (BEZ ZMIAN) --- */
 
         .generator-wrapper {
             width: 1000px;
@@ -129,8 +97,8 @@
         }
 
         #xmlOutput {
-            width: 100%; /* Dopasowanie do formularza */
-            box-sizing: border-box; /* Aby padding nie psuł szerokości */
+            width: 100%; 
+            box-sizing: border-box;
             height: 300px;
             background-color: #1e1e1e;
             color: #d4d4d4;
@@ -149,17 +117,8 @@
     <div class="form-wrapper">
         <img src="5b35db272c392_p.jpg" alt="Wzór przelewu" class="form-bg">
 
-        <input type="text" id="input-odbiorca" class="input-field" maxlength="27"
-               placeholder="NAZWA ODBIORCY" oninput="validateName(this)">
-        
-        <input type="text" id="input-nr-odbiorcy" class="input-field" maxlength="26"
-               placeholder="NR KONTA ODBIORCY (26 CYFR)" oninput="validateAccountNumber(this)">
-
-        <input type="text" id="input-nr-zleceniodawcy" class="input-field" maxlength="26"
-               placeholder="NR KONTA ZLECENIODAWCY (26 CYFR)" oninput="validateAccountNumber(this)">
-
         <input type="text" id="input-zleceniodawca" class="input-field" maxlength="27"
-               placeholder="NAZWA" oninput="validateName(this)">
+               placeholder="NAZWA" oninput="validatePayerName(this)">
         
         <input type="text" id="input-tytul" class="input-field" maxlength="27"
                placeholder="TYTUŁEM" oninput="validateTitle(this)">
@@ -174,86 +133,48 @@
     </div>
 
     <script>
-        // Zmieniłem nazwy funkcji, aby były bardziej generyczne
-        // i połączyłem walidację nazw w jedną funkcję.
-        
-        function validateName(input) {
-            // Twoja oryginalna funkcja, teraz używana przez oba pola nazw
+        // --- TWOJE ORYGINALNE FUNKCJE WALIDACJI (BEZ ZMIAN) ---
+        function validatePayerName(input) {
             input.value = input.value.replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]/g, '').toUpperCase();
         }
 
         function validateTitle(input) {
-            // Twoja oryginalna funkcja
             input.value = input.value.replace(/[^a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\/\-\.]/g, '').toUpperCase();
         }
 
         function validateAmount(input) {
-            // Twoja oryginalna funkcja
             input.value = input.value.replace('.', ',').replace(/[^0-9,]/g, '');
             if ((input.value.match(/,/g) || []).length > 1) input.value = input.value.slice(0, -1);
         }
 
-        // --- NOWE FUNKCJE DLA GENERATORA ---
-
-        function validateAccountNumber(input) {
-            // Nowa funkcja walidacji tylko dla cyfr (numery kont)
-            input.value = input.value.replace(/[^0-9]/g, '');
-        }
-
-        function escapeXML(str) {
-            // Funkcja pomocnicza do zamiany znaków specjalnych
-            // aby wygenerowany XML był zawsze poprawny.
-            return str.replace(/[<>&'"]/g, function (c) {
-                switch (c) {
-                    case '<': return '&lt;';
-                    case '>': return '&gt;';
-                    case '&': return '&amp;';
-                    case '\'': return '&apos;';
-                    case '"': return '&quot;';
-                }
-            });
-        }
+        // --- UPROSZCZONA FUNKCJA GENEROWANIA XML ---
 
         function generateXML() {
-            // 1. Pobranie wartości ze WSZYSTKICH pól
-            const odbiorca = escapeXML(document.getElementById('input-odbiorca').value);
-            const nrOdbiorcy = escapeXML(document.getElementById('input-nr-odbiorcy').value);
-            const kwota = escapeXML(document.getElementById('input-kwota').value);
-            const nrZleceniodawcy = escapeXML(document.getElementById('input-nr-zleceniodawcy').value);
-            const zleceniodawca = escapeXML(document.getElementById('input-zleceniodawca').value);
-            const tytul = escapeXML(document.getElementById('input-tytul').value);
+            // 1. Pobranie wartości tylko z 3 istniejących pól
+            const zleceniodawca = document.getElementById('input-zleceniodawca').value;
+            const tytul = document.getElementById('input-tytul').value;
+            const kwota = document.getElementById('input-kwota').value;
 
-            // 2. Prosta walidacja (sprawdzenie, czy pola nie są puste)
-            if (!odbiorca || !nrOdbiorcy || !kwota || !nrZleceniodawcy || !zleceniodawca || !tytul) {
-                alert("Proszę wypełnić wszystkie pola formularza przed wygenerowaniem XML.");
+            // 2. Walidacja tylko dla 3 pól
+            if (!zleceniodawca || !tytul || !kwota) {
+                alert("Proszę wypełnić wszystkie trzy pola formularza.");
                 return;
             }
 
-            // 3. Stworzenie szablonu XML
-            // (Użyłem `` (backticks) dla łatwiejszego formatowania tekstu)
+            // 3. Stworzenie uproszczonego szablonu XML
             const xmlString = `<?xml version="1.0" encoding="UTF-8"?>
-<przelew>
-    <odbiorca>
-        <nazwa>${odbiorca}</nazwa>
-        <rachunek>${nrOdbiorcy}</rachunek>
-    </odbiorca>
-    <zleceniodawca>
-        <nazwa>${zleceniodawca}</nazwa>
-        <rachunek>${nrZleceniodawcy}</rachunek>
-    </zleceniodawca>
-    <transakcja>
-        <kwota waluta="PLN">${kwota}</kwota>
-        <tytul>${tytul}</tytul>
-    </transakcja>
-</przelew>`;
+<wpis>
+    <zleceniodawca>${zleceniodawca}</zleceniodawca>
+    <tytul>${tytul}</tytul>
+    <kwota waluta="PLN">${kwota}</kwota>
+</wpis>`;
 
-            // 4. Wyświetlenie wyniku w polu tekstowym
+            // 4. Wyświetlenie wyniku (bez zmian)
             document.getElementById('xmlOutput').value = xmlString;
         }
 
-        // Uruchomienie skryptów po załadowaniu strony
+        // Uruchomienie skryptów po załadowaniu strony (bez zmian)
         document.addEventListener('DOMContentLoaded', (event) => {
-            // Przypisanie funkcji generateXML do kliknięcia przycisku
             document.getElementById('generateXmlButton').addEventListener('click', generateXML);
         });
 
