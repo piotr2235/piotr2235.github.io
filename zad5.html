@@ -2,13 +2,13 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Przelew Pocztowy - Wersja Uproszczona</title>
+    <title>Przelew Pocztowy</title>
     <style>
         body {
             background-color: #333;
             display: flex;
-            flex-direction: column; /* Utrzymujemy układ kolumnowy */
-            align-items: center; /* Wyśrodkowanie */
+            flex-direction: column; 
+            align-items: center; 
             padding-top: 20px;
             font-family: sans-serif;
         }
@@ -39,8 +39,7 @@
             text-transform: uppercase;
         }
 
-        /* --- TWOJE ORYGINALNE POLA (BEZ ZMIAN) --- */
-
+        
         #input-zleceniodawca {
             top: 285px;
             left: 155px;
@@ -71,8 +70,7 @@
             letter-spacing: 14px;
         }
 
-        /* --- STYLE DLA GENERATORA (BEZ ZMIAN) --- */
-
+       
         .generator-wrapper {
             width: 1000px;
             margin-top: 20px;
@@ -118,13 +116,13 @@
         <img src="5b35db272c392_p.jpg" alt="Wzór przelewu" class="form-bg">
 
         <input type="text" id="input-zleceniodawca" class="input-field" maxlength="27"
-               placeholder="NAZWA" oninput="validatePayerName(this)">
+               placeholder="NAZWA" oninput="walidujNazwe(this)">
         
         <input type="text" id="input-tytul" class="input-field" maxlength="27"
-               placeholder="TYTUŁEM" oninput="validateTitle(this)">
+               placeholder="TYTUŁEM" oninput="walidujTytul(this)">
         
         <input type="text" id="input-kwota" class="input-field" maxlength="12"
-               placeholder="0,00" oninput="validateAmount(this)">
+               placeholder="0,00" oninput="walidujKwote(this)">
     </div>
 
     <div class="generator-wrapper">
@@ -133,49 +131,40 @@
     </div>
 
     <script>
-        // --- TWOJE ORYGINALNE FUNKCJE WALIDACJI (BEZ ZMIAN) ---
-        function validatePayerName(input) {
-            input.value = input.value.replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]/g, '').toUpperCase();
+        
+        function walidujNazwe(pole) {
+            pole.value = pole.value.replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]/g, '').toUpperCase();
         }
 
-        function validateTitle(input) {
-            input.value = input.value.replace(/[^a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\/\-\.]/g, '').toUpperCase();
+        function walidujTytul(pole) {
+            pole.value = pole.value.replace(/[^a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\/\-\.]/g, '').toUpperCase();
         }
 
-        function validateAmount(input) {
-            input.value = input.value.replace('.', ',').replace(/[^0-9,]/g, '');
-            if ((input.value.match(/,/g) || []).length > 1) input.value = input.value.slice(0, -1);
+        function walidujKwote(pole) {
+            pole.value = pole.value.replace('.', ',').replace(/[^0-9,]/g, '');
+            if ((pole.value.match(/,/g) || []).length > 1) pole.value = pole.value.slice(0, -1);
         }
 
-        // --- UPROSZCZONA FUNKCJA GENEROWANIA XML ---
-
-        function generateXML() {
-            // 1. Pobranie wartości tylko z 3 istniejących pól
+    
+        function generujXML() {
+           
             const zleceniodawca = document.getElementById('input-zleceniodawca').value;
             const tytul = document.getElementById('input-tytul').value;
             const kwota = document.getElementById('input-kwota').value;
 
-            // 2. Walidacja tylko dla 3 pól
-            if (!zleceniodawca || !tytul || !kwota) {
-                alert("Proszę wypełnić wszystkie trzy pola formularza.");
-                return;
-            }
-
-            // 3. Stworzenie uproszczonego szablonu XML
-            const xmlString = `<?xml version="1.0" encoding="UTF-8"?>
+            const trescXML = `<?xml version="1.0" encoding="UTF-8"?>
 <wpis>
     <zleceniodawca>${zleceniodawca}</zleceniodawca>
     <tytul>${tytul}</tytul>
     <kwota waluta="PLN">${kwota}</kwota>
 </wpis>`;
 
-            // 4. Wyświetlenie wyniku (bez zmian)
-            document.getElementById('xmlOutput').value = xmlString;
+       
+            document.getElementById('xmlOutput').value = trescXML;
         }
 
-        // Uruchomienie skryptów po załadowaniu strony (bez zmian)
-        document.addEventListener('DOMContentLoaded', (event) => {
-            document.getElementById('generateXmlButton').addEventListener('click', generateXML);
+        document.addEventListener('DOMContentLoaded', (zdarzenie) => {
+            document.getElementById('generateXmlButton').addEventListener('click', generujXML);
         });
 
     </script>
