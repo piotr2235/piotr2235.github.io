@@ -2,22 +2,20 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Przelew Pocztowy</title>
+    <title>Przelew Pocztowy z Generatorem XML</title>
     <style>
         body {
             background-color: #333;
             display: flex;
-            flex-direction: column; /* Umożliwia centrowanie bloku formularza i przycisku pod nim */
-            align-items: center; /* Centruje elementy w poziomie */
-            justify-content: center;
+            flex-direction: column; /* Zmienione na kolumnę, aby generator był na dole */
+            align-items: center; /* Wyśrodkowanie */
             padding-top: 20px;
             font-family: sans-serif;
         }
 
         .form-wrapper {
             position: relative;
-            width: 1000px; /* Twój oryginalny, stały wymiar */
+            width: 1000px;
         }
 
         .form-bg {
@@ -38,9 +36,43 @@
             outline: none;
             line-height: 1;
             font-size: 24px;
+            text-transform: uppercase; /* Przeniesione z walidacji do CSS */
         }
 
-        /* Twoje oryginalne, precyzyjne pozycje */
+        /* --- NOWE POLA DODANE DLA GENERATORA --- */
+        
+        #input-odbiorca {
+            top: 70px;
+            left: 155px;
+            width: 815px;
+            height: 35px;
+            text-align: left;
+            padding-left: 5px;
+            letter-spacing: 14.2px;
+        }
+
+        #input-nr-odbiorcy {
+            top: 130px;
+            left: 155px;
+            width: 730px; /* 26 kratek */
+            height: 35px;
+            text-align: left;
+            padding-left: 5px;
+            letter-spacing: 14.2px;
+        }
+        
+        #input-nr-zleceniodawcy {
+            top: 235px;
+            left: 155px;
+            width: 730px; /* 26 kratek */
+            height: 35px;
+            text-align: left;
+            padding-left: 5px;
+            letter-spacing: 14.2px;
+        }
+
+        /* --- TWOJE ISTNIEJĄCE POLA (BEZ ZMIAN) --- */
+
         #input-zleceniodawca {
             top: 285px;
             left: 155px;
@@ -49,7 +81,6 @@
             text-align: left;
             padding-left: 5px;
             letter-spacing: 14.2px;
-            text-transform: uppercase;
         }
 
         #input-tytul {
@@ -60,9 +91,7 @@
             text-align: left;
             padding-left: 5px;
             letter-spacing: 14.2px;
-            text-transform: uppercase;
         }
-
 
         #input-kwota {
             top: 182px;
@@ -74,23 +103,43 @@
             letter-spacing: 14px;
         }
 
-        /* Styl dla nowego przycisku */
-        #save-xml-btn {
-            margin-top: 20px; /* Odstęp od formularza */
-            padding: 12px 25px;
-            font-size: 16px;
-            font-weight: bold;
-            color: #fff;
-            background-color: #007bff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        /* --- NOWE STYLE DLA GENERATORA --- */
+
+        .generator-wrapper {
+            width: 1000px;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        #save-xml-btn:hover {
-            background-color: #0056b3;
+        #generateXmlButton {
+            background-color: #f0f0f0;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.2s;
+        }
+
+        #generateXmlButton:hover {
+            background-color: #ddd;
+        }
+
+        #xmlOutput {
+            width: 100%; /* Dopasowanie do formularza */
+            box-sizing: border-box; /* Aby padding nie psuł szerokości */
+            height: 300px;
+            background-color: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            padding: 10px;
+            resize: vertical;
         }
 
     </style>
@@ -98,8 +147,117 @@
 <body>
 
     <div class="form-wrapper">
-        <!-- Wróciłem do Twojego oryginalnego obrazka, zakładając, że 'image_54ee4d.jpg' to ten właściwy. Jeśli nie, zmień src na "5b35db272c392_p.jpg" lub inną nazwę. -->
-        <img src="image_54ee4d.jpg" alt="Wzór przelewu" class="form-bg">
+        <img src="5b35db272c392_p.jpg" alt="Wzór przelewu" class="form-bg">
+
+        <input type="text" id="input-odbiorca" class="input-field" maxlength="27"
+               placeholder="NAZWA ODBIORCY" oninput="validateName(this)">
+        
+        <input type="text" id="input-nr-odbiorcy" class="input-field" maxlength="26"
+               placeholder="NR KONTA ODBIORCY (26 CYFR)" oninput="validateAccountNumber(this)">
+
+        <input type="text" id="input-nr-zleceniodawcy" class="input-field" maxlength="26"
+               placeholder="NR KONTA ZLECENIODAWCY (26 CYFR)" oninput="validateAccountNumber(this)">
 
         <input type="text" id="input-zleceniodawca" class="input-field" maxlength="27"
-               placeholder="NAZWA" oninput="validateP
+               placeholder="NAZWA" oninput="validateName(this)">
+        
+        <input type="text" id="input-tytul" class="input-field" maxlength="27"
+               placeholder="TYTUŁEM" oninput="validateTitle(this)">
+        
+        <input type="text" id="input-kwota" class="input-field" maxlength="12"
+               placeholder="0,00" oninput="validateAmount(this)">
+    </div>
+
+    <div class="generator-wrapper">
+        <button id="generateXmlButton">Generuj XML</button>
+        <textarea id="xmlOutput" readonly placeholder="Tutaj pojawi się wygenerowany kod XML..."></textarea>
+    </div>
+
+    <script>
+        // Zmieniłem nazwy funkcji, aby były bardziej generyczne
+        // i połączyłem walidację nazw w jedną funkcję.
+        
+        function validateName(input) {
+            // Twoja oryginalna funkcja, teraz używana przez oba pola nazw
+            input.value = input.value.replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]/g, '').toUpperCase();
+        }
+
+        function validateTitle(input) {
+            // Twoja oryginalna funkcja
+            input.value = input.value.replace(/[^a-zA-Z0-9ąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s\/\-\.]/g, '').toUpperCase();
+        }
+
+        function validateAmount(input) {
+            // Twoja oryginalna funkcja
+            input.value = input.value.replace('.', ',').replace(/[^0-9,]/g, '');
+            if ((input.value.match(/,/g) || []).length > 1) input.value = input.value.slice(0, -1);
+        }
+
+        // --- NOWE FUNKCJE DLA GENERATORA ---
+
+        function validateAccountNumber(input) {
+            // Nowa funkcja walidacji tylko dla cyfr (numery kont)
+            input.value = input.value.replace(/[^0-9]/g, '');
+        }
+
+        function escapeXML(str) {
+            // Funkcja pomocnicza do zamiany znaków specjalnych
+            // aby wygenerowany XML był zawsze poprawny.
+            return str.replace(/[<>&'"]/g, function (c) {
+                switch (c) {
+                    case '<': return '&lt;';
+                    case '>': return '&gt;';
+                    case '&': return '&amp;';
+                    case '\'': return '&apos;';
+                    case '"': return '&quot;';
+                }
+            });
+        }
+
+        function generateXML() {
+            // 1. Pobranie wartości ze WSZYSTKICH pól
+            const odbiorca = escapeXML(document.getElementById('input-odbiorca').value);
+            const nrOdbiorcy = escapeXML(document.getElementById('input-nr-odbiorcy').value);
+            const kwota = escapeXML(document.getElementById('input-kwota').value);
+            const nrZleceniodawcy = escapeXML(document.getElementById('input-nr-zleceniodawcy').value);
+            const zleceniodawca = escapeXML(document.getElementById('input-zleceniodawca').value);
+            const tytul = escapeXML(document.getElementById('input-tytul').value);
+
+            // 2. Prosta walidacja (sprawdzenie, czy pola nie są puste)
+            if (!odbiorca || !nrOdbiorcy || !kwota || !nrZleceniodawcy || !zleceniodawca || !tytul) {
+                alert("Proszę wypełnić wszystkie pola formularza przed wygenerowaniem XML.");
+                return;
+            }
+
+            // 3. Stworzenie szablonu XML
+            // (Użyłem `` (backticks) dla łatwiejszego formatowania tekstu)
+            const xmlString = `<?xml version="1.0" encoding="UTF-8"?>
+<przelew>
+    <odbiorca>
+        <nazwa>${odbiorca}</nazwa>
+        <rachunek>${nrOdbiorcy}</rachunek>
+    </odbiorca>
+    <zleceniodawca>
+        <nazwa>${zleceniodawca}</nazwa>
+        <rachunek>${nrZleceniodawcy}</rachunek>
+    </zleceniodawca>
+    <transakcja>
+        <kwota waluta="PLN">${kwota}</kwota>
+        <tytul>${tytul}</tytul>
+    </transakcja>
+</przelew>`;
+
+            // 4. Wyświetlenie wyniku w polu tekstowym
+            document.getElementById('xmlOutput').value = xmlString;
+        }
+
+        // Uruchomienie skryptów po załadowaniu strony
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Przypisanie funkcji generateXML do kliknięcia przycisku
+            document.getElementById('generateXmlButton').addEventListener('click', generateXML);
+        });
+
+    </script>
+
+</body>
+</html>
