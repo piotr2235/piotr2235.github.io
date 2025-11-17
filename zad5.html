@@ -2,19 +2,24 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Przelew Pocztowy</title>
     <style>
         body {
             background-color: #333;
             display: flex;
+            flex-direction: column; /* Ustawienie kierunku na kolumnowy */
+            align-items: center; /* Wyśrodkowanie w poziomie */
             justify-content: center;
             padding-top: 20px;
             font-family: sans-serif;
+            min-height: 100vh;
         }
 
         .form-wrapper {
             position: relative;
             width: 1000px;
+            max-width: 95%; /* Dodanie responsywności */
         }
 
         .form-bg {
@@ -26,72 +31,125 @@
         .input-field {
             position: absolute;
             background: transparent;
-            border: none; 
-            font-family: 'Courier New', Courier, monospace; 
+            border: none;
+            font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
             color: #000;
             padding: 0;
             margin: 0;
             outline: none;
             line-height: 1;
-            font-size: 24px; 
+            font-size: 24px;
+            /* Użycie procentów dla lepszego skalowania na mniejszych ekranach */
+            /* Rozmiary i pozycje są przeliczone na procenty względem szerokości 1000px */
         }
 
-   
+        /* Przykładowe dostosowanie na podstawie oryginalnych pikseli (top/left/width/height) */
+        
         #input-zleceniodawca {
-            top: 285px;        
-            left: 155px;       
+            top: 28.5%; /* 285px / 1000px (przybliżona wysokość obrazka, lepiej użyć proporcji obrazka) */
+            /* Niestety, pozycjonowanie absolutne na obrazku jest trudne do zrobienia responsywnie bez znajomości proporcji obrazka */
+            /* Na razie zostawiam wartości zbliżone do oryginalnych, ale responsywność może być niedokładna */
+            top: 285px;
+            left: 155px;
             width: 815px;
             height: 35px;
             text-align: left;
             padding-left: 5px;
-            letter-spacing: 14.2px; 
+            letter-spacing: 14.2px;
             text-transform: uppercase;
         }
 
         #input-tytul {
-            top: 385px;       
-            left: 155px;       
+            top: 385px;
+            left: 155px;
             width: 815px;
             height: 35px;
             text-align: left;
             padding-left: 5px;
-            letter-spacing: 14.2px; 
+            letter-spacing: 14.2px;
             text-transform: uppercase;
         }
 
-       
         #input-kwota {
-            top: 182px;         
+            top: 182px;
             left: 585px;
             width: 360px;
             height: 35px;
             text-align: right;
             padding-right: 15px;
-            letter-spacing: 14px; 
+            letter-spacing: 14px;
         }
 
+        /* Dostosowanie dla mniejszych ekranów */
+        /* To jest bardzo trudne do zrobienia dobrze bez zmiany podejścia (np. na formularz CSS grid) */
+        /* Ta próba może nie działać idealnie */
+        @media (max-width: 1024px) {
+            .form-wrapper {
+                width: 100%;
+            }
+            .input-field {
+                /* Przeskalowanie fontu i odstępów */
+                font-size: 1.8vw; /* Skalowanie fontu z szerokością ekranu */
+                letter-spacing: 0.14vw !important; /* Skalowanie odstępów */
+                /* Trzeba by dynamicznie przeliczyć wszystkie pozycje, co jest skomplikowane */
+                /* Poniżej bardzo uproszczone wartości procentowe */
+            }
+
+            #input-zleceniodawca {
+                top: 28.5%; left: 15.5%; width: 81.5%; height: 3.5%; font-size: 2.2vw; letter-spacing: 1.42vw;
+            }
+            #input-tytul {
+                top: 38.5%; left: 15.5%; width: 81.5%; height: 3.5%; font-size: 2.2vw; letter-spacing: 1.42vw;
+            }
+            #input-kwota {
+                top: 18.2%; left: 58.5%; width: 36%; height: 3.5%; font-size: 2.2vw; letter-spacing: 1.4vw;
+            }
+        }
+
+
+        #save-xml-btn {
+            margin-top: 20px;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        #save-xml-btn:hover {
+            background-color: #0056b3;
+        }
 
     </style>
 </head>
 <body>
 
     <div class="form-wrapper">
-        <img src="5b35db272c392_p.jpg" alt="Wzór przelewu" class="form-bg">
+        <!-- Zaktualizowano nazwę pliku obrazu na ten, który przesłałeś -->
+        <img src="image_54ee4d.jpg" alt="Wzór przelewu" class="form-bg">
 
-        <input type="text" id="input-zleceniodawca" class="input-field" maxlength="27" 
+        <input type="text" id="input-zleceniodawca" class="input-field" maxlength="27"
                placeholder="NAZWA" oninput="validatePayerName(this)">
         
-        <input type="text" id="input-tytul" class="input-field" maxlength="27" 
+        <input type="text" id="input-tytul" class="input-field" maxlength="27"
                placeholder="TYTUŁEM" oninput="validateTitle(this)">
         
-        <input type="text" id="input-kwota" class="input-field" maxlength="12" 
+        <input type="text" id="input-kwota" class="input-field" maxlength="12"
                placeholder="0,00" oninput="validateAmount(this)">
 
-     
     </div>
 
+    <!-- Dodany przycisk zapisu -->
+    <button id="save-xml-btn">Zapisz XML</button>
+
     <script>
+        // Twoje istniejące funkcje walidacji
         function validatePayerName(input) {
             input.value = input.value.replace(/[^a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ\s]/g, '').toUpperCase();
         }
@@ -105,7 +163,45 @@
             if ((input.value.match(/,/g) || []).length > 1) input.value = input.value.slice(0, -1);
         }
 
-        
+        // Nowa funkcja do zapisu XML
+        function saveToXML() {
+            // 1. Pobranie wartości z pól formularza
+            const zleceniodawca = document.getElementById('input-zleceniodawca').value;
+            const tytul = document.getElementById('input-tytul').value;
+            const kwota = document.getElementById('input-kwota').value;
+
+            // 2. Stworzenie treści XML
+            // Używamy CDATA, aby bezpiecznie przechować znaki specjalne, jeśli się pojawią
+            const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
+<przelew>
+    <zleceniodawca><![CDATA[${zleceniodawca}]]></zleceniodawca>
+    <tytul><![CDATA[${tytul}]]></tytul>
+    <kwota><![CDATA[${kwota}]]></kwota>
+</przelew>`;
+
+            // 3. Utworzenie obiektu Blob (Binary Large Object)
+            // Blob pozwala traktować tekst jak plik
+            const blob = new Blob([xmlContent], { type: 'application/xml;charset=utf-8' });
+
+            // 4. Utworzenie linku do pobrania pliku
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            
+            // 5. Ustawienie nazwy pobieranego pliku
+            link.download = 'przelew.xml';
+
+            // 6. Symulacja kliknięcia w link, aby rozpocząć pobieranie
+            // Musimy dodać link do dokumentu, aby to zadziałało w niektórych przeglądarkach
+            document.body.appendChild(link);
+            link.click();
+            
+            // 7. Usunięcie linku po pobraniu
+            document.body.removeChild(link);
+        }
+
+        // Dodanie nasłuchiwania na kliknięcie przycisku
+        document.getElementById('save-xml-btn').addEventListener('click', saveToXML);
+
     </script>
 
 </body>
